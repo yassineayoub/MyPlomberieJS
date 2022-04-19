@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400&display=swap');
+*{
+    font-family: 'Josefin Sans', sans-serif;
+}
+.headerContainer{
+    display: flex;
+    grid-column: 2 / 3;
+    flex-direction: column;
+}
+.htmlInstructions{
+    display: flex;
+    grid-column: 2 / 3;
+}
+body{
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr; 
+    box-sizing: border-box;
+    
+}
+.title{
+    border: #988BAD solid 4px;
+    padding: 5px;
+    grid-column: 1/ 4;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow:  2px 2px 2px #988BAD;
+    font-size: 1.5rem;
+    text-align: center;
+}
+.form{ 
+    grid-column: 2 / 3;
+}
+.tHeader{
+    display: flex;
+    justify-content: flex-end;
+    height: fit-content;
+    margin: 0 50px;
+    font-size: 1rem;
+}
+.tHeader p {
+    margin: 0;
+}
+.containerToggle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(45px,auto);
+    margin-bottom: 1px;
+    border-bottom: solid 1px;
+    border-radius: 5px;
+    background: #cce6f4;
+
+}
+.container{
+    display: flex;
+    justify-content: flex-end;
+}
+.form-label{
+    justify-content: flex-start;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    min-width: 50px;
+    font-size: 1.2rem;
+    padding-left: 5px;
+  
+}
+.form-control{
+    display: flex;
+    margin: 0;
+    width: 80px;
+    padding-left: 12px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1rem;
+    background: #B4C8E0;
+    border: 1px solid rgb(92, 92, 92);
+    border-bottom: none;
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+
+}
+.pvc{
+    display: flex;
+    width: 110px;
+    margin: 0;
+    min-width: 56px;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    background: #B4C8E0;
+    border: 1px solid rgb(92, 92, 92);
+    border-bottom: none;
+    border-radius: 5px;
+    cursor:default;
+    background: #988badd8;
+
+}
+
+.select option:nth-child(2n){
+    background: #B4C8E0;
+}
+.select{
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    height: 40px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    margin-top: 10px;
+
+}
+.btn{
+    
+    width: 100%;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    flex-grow: 1;
+    height: 45px;
+    font-size: 2rem;
+    background: #988BAD;
+    /* border: solid 1px black; */
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+    box-shadow: 10px 15px 10px 2px hsla(0, 0%, 0%, 0.329);
+}
+.reset{
+    display: flex;
+    justify-content: center;
+}   
+.reset .resetLink {
+    text-decoration: none;
+    padding: 5px;
+    font-size: 1.2rem;
+    border: solid 1px;
+    background: #988BAD;
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+}
+
+.result{
+    text-align: center;
+    display: flex;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    align-items: center;
+    justify-content: center;
+    grid-column: 2 / 3;
+    border-radius: 5px;
+    background: #3ece86;
+    font-size: 1.2rem;
+    font-weight: 500;
+    height: auto;
+    min-height: 40px;
+}
+.result2 {
+    flex-direction: column;
+}
+.result p{
+    margin: 0;
+}
+.resultFalse{
+    background:#f58282;
+    border-radius: 15px;
+}
+
+.divDescrib {
+    border: solid 1px;
+    border-top: 0px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+.pDescrib:first-of-type{
+    text-decoration: underline;
+}
+
+.pDescrib{
+    margin: 5px;
+}
+input:target{
+    color: #3ece86;
+}
+
+.hidden {
+    display: none;
+}
+@media (max-width:768px){
+    body{
+        grid-template-columns: auto 1fr auto; 
+        
+    }
+    .form{ 
+       grid-column: 2 / 3;
+    
+    }
+    
+}
+@media (max-width:360px){
+    body{
+        grid-template-columns: 1fr;
+
+    }
+    .form-group{ 
+       display: flex;
+       flex-direction: column;
+        margin-top: 10px;
+
+    }
+    .form-control{
+        min-height: 45px;
+        flex-grow: 1;
+    }
+    .form-label{
+        padding: 10px;
+        justify-content: center;
+        text-align: center;
+    }
+    .container{
+        justify-content: center;
+    }
+
+}
