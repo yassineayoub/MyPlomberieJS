@@ -600,8 +600,9 @@ tubes.forEach(tube => {
 let selectEquipement = document.querySelector('#equipSelect');
 for( let i = 0 ; i < equipements.length; i++){
     let equip = equipements[i];
+    let name = lcFirst(equip.name);
     let option = document.createElement('option');
-    option.className = equip.name;
+    option.className = name;
     option.setAttribute('value',equip.name);
     option.innerHTML = equip.name;
     selectEquipement.appendChild(option); 
@@ -609,16 +610,47 @@ for( let i = 0 ; i < equipements.length; i++){
 
 let equipButton = document.querySelector("#equipSelectBtn");
 
+
 equipButton.addEventListener('click', () => {
+    console.log(document.querySelector('div.'+ lcFirst(selectEquipement.value)));
     createInput(selectEquipement.value);
+    // si l'equipement existe deja dans le DOM , 
+    if (document.querySelector('div.'+ lcFirst(selectEquipement.value)) !== null ){
+        // alors on supprime l'option du select
+        let removeOption = document.querySelector('#equipSelect .'+ lcFirst(selectEquipement.value));
+        // console.log(removeOption);
+        selectEquipement.removeChild(removeOption);
+    }
 })
 
+
+function supprInputBtn(option){
+    let btnSupprInput = document.createElement('button');
+    btnSupprInput.innerHTML = "Suppr";
+    btnSupprInput.classList.add('btn-'+ lcFirst(option));
+    return btnSupprInput;
+    // btnSupprInput.addEventListener('click', () => {
+
+    // })
+}
+
+// IL FAUT DIVISER CETTE FONCTION , TROP LOURDE 
+
 function createInput(option){
+    optionClass = lcFirst(option);
     //creation de la div GENERAL pour chaque equipement
     let formGroupDiv = document.createElement('div');
-    formGroupDiv.classList.add(option,'form-group');
+    formGroupDiv.classList.add(optionClass,'form-group');
     document.querySelector('div.equip').appendChild(formGroupDiv)
+    let supprBtn = supprInputBtn(option);
+    formGroupDiv.appendChild(supprBtn);
+
+    //btn qui remove l'element
+    supprBtn.addEventListener('click', () => {
+        console.log(formGroupDiv);
+        formGroupDiv.remove();
     
+    })
 
     //creation de la div qui contiendra l'inpput et ajout au form-group
     let divContainer = document.createElement('div')
@@ -626,18 +658,24 @@ function createInput(option){
     //Creation du form Label
     let formLabel = document.createElement('label');
     formLabel.classList.add('form-label');
-    formLabel.setAttribute('for',option);
+    formLabel.setAttribute('for',optionClass);
     formLabel.innerHTML = option;
     formGroupDiv.appendChild(formLabel);
     
     //creation du form Input
     let formInput = document.createElement('input');
     formInput.classList.add('form-control')
-    formInput.setAttribute('name',option)
-    formInput.setAttribute("id",option);
+    formInput.setAttribute('name',optionClass)
+    formInput.setAttribute("id",optionClass);
     divContainer.appendChild(formInput);
     
     //ajout du divContainer au form group
     divContainer.classList.add('container')
     formGroupDiv.appendChild(divContainer)
+}
+
+function lcFirst(string){
+// Mettre en minuscle la premiere lettre :
+    let str = string
+    return (str.charAt(0).toLocaleLowerCase() + str.substring(1));
 }
