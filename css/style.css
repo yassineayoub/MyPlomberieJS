@@ -49,7 +49,7 @@ body{
 
 .form-group {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr auto;
     grid-template-rows: minmax(45px,auto);
     margin-bottom: 1px;
     border-bottom: solid 1px;
@@ -133,6 +133,21 @@ body{
     color: rgb(0, 0, 0);
     box-shadow: 10px 15px 10px 2px hsla(0, 0%, 0%, 0.329);
 }
+button[class*="btn--"]{
+
+    height: 45px;
+    width: 45px;
+    background: #988BAD;
+    cursor: pointer;
+    border: solid 1px black;
+    border-radius: 5px;
+}
+
+button svg{
+   height: 100%;
+   width: 100%;  
+}
+
 .reset{
     display: flex;
     justify-content: center;

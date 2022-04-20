@@ -581,76 +581,81 @@ let jsonEquips = JSON.stringify([
 let tubes = JSON.parse(jsonTubes);
 let equipements = JSON.parse(jsonEquips);
 
-console.log(equipements);
-console.log(tubes);
-let tubeType = []
-tubes.forEach(tube => {
-    tubeType.push(tube.type);
-    // if (tubeType.find(tube.type) === undefined ) {
-    //     tubeType = tube;
-    // }
-    // console.log(tube.type);
-});
-
-// let uniqueTube = new Set(tubeType);
-// console.log(uniqueTube);
-// console.log(tubeType);
+// console.log(equipements);
+// console.log(tubes);
 
 // import des équipements dans le select
 let selectEquipement = document.querySelector('#equipSelect');
-for( let i = 0 ; i < equipements.length; i++){
-    let equip = equipements[i];
-    let name = lcFirst(equip.name);
-    let option = document.createElement('option');
-    option.className = name;
-    option.setAttribute('value',equip.name);
-    option.innerHTML = equip.name;
-    selectEquipement.appendChild(option); 
-}
-
+let selectOptions = insertOptionToSelect(selectEquipement,equipements);
 let equipButton = document.querySelector("#equipSelectBtn");
 
-
-equipButton.addEventListener('click', () => {
-    console.log(document.querySelector('div.'+ lcFirst(selectEquipement.value)));
-    createInput(selectEquipement.value);
-    // si l'equipement existe deja dans le DOM , 
-    if (document.querySelector('div.'+ lcFirst(selectEquipement.value)) !== null ){
-        // alors on supprime l'option du select
-        let removeOption = document.querySelector('#equipSelect .'+ lcFirst(selectEquipement.value));
-        // console.log(removeOption);
-        selectEquipement.removeChild(removeOption);
+function insertOptionToSelect(selectName, arrayToInsert){
+    for( let i = 0 ; i < arrayToInsert.length; i++){
+        let equip = arrayToInsert[i];
+        let name = lcFirst(equip.name);
+        name = name.replace(/\s+/g, "");
+        let option = document.createElement('option');
+        option.className = name;
+        option.setAttribute('value',equip.name);
+        option.innerHTML = equip.name;
+        selectName.appendChild(option); 
     }
+}
+
+let deleteButton = document.querySelector('button');
+deleteButton.addEventListener('click', () => {
+    console.log(deleteButton.classList);
+    
 })
 
 
-function supprInputBtn(option){
-    let btnSupprInput = document.createElement('button');
-    btnSupprInput.innerHTML = "Suppr";
-    btnSupprInput.classList.add('btn-'+ lcFirst(option));
-    return btnSupprInput;
-    // btnSupprInput.addEventListener('click', () => {
+equipButton.addEventListener('click', () => {
+    // console.log(document.querySelector('div.'+ lcFirst(selectEquipement.value)));
+    let equipName = selectEquipement.value;
+    // on supprime les whitesSpaces
+    equipName= lcFirst(equipName.replace(/\s+/g, ''))
+    
+    console.log(createInput(selectEquipement.value));
+    // si l'equipement existe deja dans le DOM , 
+    if (document.querySelector('div.'+ equipName) !== null ){
+        // alors on supprime l'option du select
+        // console.log(lcFirst(equipName))
+        let removeOption = document.querySelector('#equipSelect .'+ equipName);
+        // console.log(removeOption);
+        selectEquipement.removeChild(removeOption);
+    }
+   
+})
 
-    // })
-}
 
-// IL FAUT DIVISER CETTE FONCTION , TROP LOURDE 
+// function removeOptionFromSelect(selectName){
+//     let equipName = selectEquipement.value;
+//     equipName= lcFirst(equipName.replace(/\s+/g, ''))
+//     if (document.querySelector('div.'+ equipName) !== null ){
+//         let removeOption = document.querySelector('#equipSelect .'+ equipName);
+//         return selectEquipement.removeChild(removeOption);
+//     }
+
+// }
+
+
 
 function createInput(option){
+    // on met en minuscule la 1ere lettre
     optionClass = lcFirst(option);
+    optionClass.replace(/\s+/g, '')
+    // on supprime les whitesSpaces
+    // let equipName = selectEquipement.value;
+    // str = str.replace(/\s+/g, '');
+    //si l'équipement.value contient des espaces, on les supprimes
+    // console.log(equipName.replace(/\s+/g, '')); 
+
+
     //creation de la div GENERAL pour chaque equipement
     let formGroupDiv = document.createElement('div');
-    formGroupDiv.classList.add(optionClass,'form-group');
+    //Ajout des différentes class :
+    formGroupDiv.classList.add(optionClass.replace(/\s+/g, ''),'form-group');
     document.querySelector('div.equip').appendChild(formGroupDiv)
-    let supprBtn = supprInputBtn(option);
-    formGroupDiv.appendChild(supprBtn);
-
-    //btn qui remove l'element
-    supprBtn.addEventListener('click', () => {
-        console.log(formGroupDiv);
-        formGroupDiv.remove();
-    
-    })
 
     //creation de la div qui contiendra l'inpput et ajout au form-group
     let divContainer = document.createElement('div')
@@ -672,6 +677,12 @@ function createInput(option){
     //ajout du divContainer au form group
     divContainer.classList.add('container')
     formGroupDiv.appendChild(divContainer)
+
+    //insertion button 
+    let deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('btn--' + optionClass.replace(/\s+/g,''));
+    formGroupDiv.appendChild(deleteBtn);
+
 }
 
 function lcFirst(string){
@@ -679,3 +690,19 @@ function lcFirst(string){
     let str = string
     return (str.charAt(0).toLocaleLowerCase() + str.substring(1));
 }
+
+
+
+
+// var string = "je test"
+// console.log(string.replace(' ',''));
+
+   // let supprBtn = supprInputBtn(option);
+    // formGroupDiv.appendChild(supprBtn);
+
+    //btn qui remove l'element
+    // supprBtn.addEventListener('click', () => {
+    //     console.log(formGroupDiv);
+    //     formGroupDiv.remove();
+    
+    // })
