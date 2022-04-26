@@ -20,6 +20,7 @@ class Input extends Equip{
                 <input class="form-control " type="number" id="$name" name="$name" value="$value" placeholder="0">
             </div>
         </div>
+
         HTML;
     }
 
