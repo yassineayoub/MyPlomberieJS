@@ -1,5 +1,4 @@
-let jsonTubes = JSON.stringify([
-    {
+let jsonTubes = JSON.stringify([{
         "contenance": 0.028,
         "diamExt": 8,
         "diamInt": 6,
@@ -472,8 +471,7 @@ let jsonTubes = JSON.stringify([
         "type": "multicouche"
     }
 ]);
-let jsonEquips = JSON.stringify([
-    {
+let jsonEquips = JSON.stringify([{
         "coeff": 2.5,
         "debitMin": 0.2,
         "diamEvac": 40,
@@ -578,17 +576,49 @@ let jsonEquips = JSON.stringify([
         "name": "Lave-vaisselle"
     }
 ]);
+
+const coefficiantDiametre = {
+    2: 11,
+    2.5: 11.5,
+    3: 12,
+    3.5: 13,
+    4: 13.7,
+    4.5: 14,
+    5: 14.4,
+    5: 14.4,
+    5.5: 15,
+    6: 15.8,
+    6.5: 16,
+    7: 16.2,
+    7.5: 16.4,
+    8: 17,
+    8.5: 17.2,
+    9: 17.5,
+    9.5: 17.8,
+    10: 18,
+    10.5: 18.2,
+    11: 18.6,
+    11.5: 19,
+    12: 19.2,
+    12.5: 19.5,
+    13: 19.7,
+    13.5: 19.8,
+    14: 20,
+    14.5: 20,
+    15: 20.1,
+}
+
 let tubes = JSON.parse(jsonTubes);
 let equipements = JSON.parse(jsonEquips);
-
+const tubeMat = ['cuivre','PER','multicouche','PEHD'];
 console.log(equipements);
 // equipements à afficher de base dans la page
-const equipementsToDontShow = ['Evier','Lavabo','Douche','WC','Lave-linge','Lave-vaisselle'];
+const equipementsToDontShow = ['Evier', 'Lavabo', 'Douche', 'WC', 'Lave-linge', 'Lave-vaisselle'];
 
 // import des équipements dans le select
 const selectEquipement = document.querySelector('#equipSelect');
 // on boucle sur la fonction pour inserer chaque equipement(options) dans le select
-const selectOptions = insertOptionToSelect(selectEquipement,equipements,equipementsToDontShow);
+const selectOptions = insertOptionToSelect(selectEquipement, equipements, equipementsToDontShow);
 //div container ( balise form )
 const formContainer = document.querySelector('.form.equip');
 //bouton d'ajouts des equipements
@@ -597,82 +627,82 @@ const equipButton = document.querySelector("#equipSelectBtn");
 const calcButton = document.createElement('button');
 calcButton.textContent = "Calculer";
 calcButton.id = "submit-form";
+//Form selector
+const form = document.querySelector('form');
+
+const inputs = document.querySelectorAll('.form-control')
+//Reset button
+const resetBtn = document.createElement('button');
+resetBtn.textContent = "Reset";
+
+//Secteur de tubes :
+const tubeSelector = document.querySelector('#tubeSelector');
+for (const tube of tubeMat) {
+    const tubeOption = document.createElement('option');
+    tubeOption.textContent = ucFirst(tube);
+    tubeOption.value = tube;
+    tubeSelector.append(tubeOption);
+}
+
 
 //on insert dans le DOM les équipements standard à afficher :
 // si la fonction isOptionToShowInSelect est === false
 equipements.forEach(equipement => {
-    if(!isOptionToShowInSelect(equipement.name,equipementsToDontShow)){
+    if (!isOptionToShowInSelect(equipement.name, equipementsToDontShow)) {
         // Pour chaque equipements présent dans l'array , on créer un input 
         createInput(equipement.name)
     }
 });
 
 formContainer.append(calcButton);
-
-
-
-
-
-
-
-
+formContainer.append(resetBtn)
 
 // fonction pour choisir les élément a ne pas afficher dans le select
-function isOptionToShowInSelect(items,itemsToDontShow){
-    if (itemsToDontShow.includes(items)){
+function isOptionToShowInSelect(items, itemsToDontShow) {
+    if (itemsToDontShow.includes(items)) {
         return false
     } else {
         return true;
     }
 }
 
-function insertOptionToSelect(selectName, arrayToInsert,equipementsToDontShow){
-    for( let i = 0 ; i < arrayToInsert.length; i++){
+function insertOptionToSelect(selectName, arrayToInsert, equipementsToDontShow) {
+    for (let i = 0; i < arrayToInsert.length; i++) {
         //si l'equipement n'est pas présent dans la liste déja affiché de base alors :
-        if (isOptionToShowInSelect(arrayToInsert[i].name,equipementsToDontShow)){
+        if (isOptionToShowInSelect(arrayToInsert[i].name, equipementsToDontShow)) {
             let equipement = arrayToInsert[i];
             let name = lcFirst(equipement.name);
             //création d'une option du select
             let option = document.createElement('option');
-            option.setAttribute('value',equipement.name);
+            option.setAttribute('value', equipement.name);
             option.className = name;
             option.innerHTML = equipement.name;
             name = name.replace(/\s+/g, "");
-            selectName.appendChild(option); 
+            selectName.appendChild(option);
         }
-       
+
     }
 }
 
-equipButton.addEventListener('click', () => {
-
+equipButton.addEventListener('click', (e) => {
+    e.preventDefault()
     let equipName = selectEquipement.value;
     // on supprime les whitesSpaces
-    equipName= lcFirst(equipName.replace(/\s+/g, ''))
-    
+    equipName = lcFirst(equipName.replace(/\s+/g, ''))
+
     // console.log(createInput(selectEquipement.value));
     // si l'equipement existe deja dans le DOM , 
-    if (document.querySelector('div.'+ equipName) !== null ){
+    if (document.querySelector('div.' + equipName) !== null) {
         // alors on supprime l'option du select
         // console.log(lcFirst(equipName))
-        let removeOption = document.querySelector('#equipSelect .'+ equipName);
+        let removeOption = document.querySelector('#equipSelect .' + equipName);
         // console.log(removeOption);
         selectEquipement.removeChild(removeOption);
     }
-   
+
 })
 
-
-// function createLabel(labelName){
-//     let formLabel = document.createElement('label');
-//     formLabel.classList.add('form-label');
-//     formLabel.setAttribute('for',labelName);
-//     formLabel.innerHTML = labelName;
-//     formGroupDiv.appendChild(formLabel);
-// }
-// createLabel('TESt')
-
-function createInput(option){
+function createInput(option) {
     // on met en minuscule la 1ere lettre
     optionClass = lcFirst(option);
     optionClass.replace(/\s+/g, '')
@@ -680,114 +710,134 @@ function createInput(option){
     //creation de la div GENERAL pour chaque equipement
     let formGroupDiv = document.createElement('div');
     //Ajout des différentes class :
-    formGroupDiv.classList.add(optionClass.replace(/\s+/g, ''),'form-group');
+    formGroupDiv.classList.add(optionClass.replace(/\s+/g, ''), 'form-group');
     document.querySelector('div.equip').appendChild(formGroupDiv)
 
     //creation de la div qui contiendra l'inpput et ajout au form-group
     let divContainer = document.createElement('div')
 
-    
+
     //Creation du form Label
     let formLabel = document.createElement('label');
     formLabel.classList.add('form-label');
-    formLabel.setAttribute('for',optionClass);
+    formLabel.setAttribute('for', optionClass);
     formLabel.innerHTML = option;
     formGroupDiv.appendChild(formLabel);
-    
+
     //creation du form Input
     let formInput = document.createElement('input');
     formInput.classList.add('form-control')
-    formInput.setAttribute('name',optionClass)
-    formInput.setAttribute("id",optionClass);
+    formInput.setAttribute('name', optionClass)
+    formInput.setAttribute("id", optionClass);
     divContainer.appendChild(formInput);
-    
+
     //ajout du divContainer au form group
     divContainer.classList.add('container')
     formGroupDiv.appendChild(divContainer)
 
     //insertion button 
     let deleteBtn = document.createElement('button');
-    deleteBtn.classList.add('btn--' + optionClass.replace(/\s+/g,''));
+    // deleteBtn.classList.add('btn--' + optionClass.replace(/\s+/g,''));
+    deleteBtn.classList.add('btn--delete');
+
     formGroupDiv.appendChild(deleteBtn);
 
 }
 
-function ucFirst (string) {
+//DELETE BUTTON + EVENT
+function deleteEquipement() {
+    this.closest(".form-group").remove()
+}
+
+
+
+/// fonction pour calculer la somme des coefficiant des inputs et l'afficher
+let sumTotal = 0;
+//Rend persistant les données entrée par l'utilisateur
+function setInputFromStorage() {
+    inputs.forEach(element => {
+        element.value = localStorage.getItem(element.id);
+    })
+}
+//clear les données en local Sstorage des inputs entrées par l'utilisateur
+function unsetInput() {
+    inputs.forEach(element => {
+        localStorage.clear()
+    })
+}
+
+// function qui va générer le diametre général du tube
+function showInputValue(e) {
+    // e.preventDefault()
+    let sumCoeff = 0;
+    // localStorage.clear();
+    for (let i = 0; i < inputs.length; i++) {
+        // Si l'input value est supérieur a 0 
+        if (inputs[i].value > 0) {
+            // on recupere la somme des coefficients de chaques equipements
+            equipements.forEach(equipement => {
+                equipement.name = lcFirst(equipement.name);
+                if (equipement.name == inputs[i].id) {
+                    sumCoeff += equipement.coeff * inputs[i].value;
+                    localStorage.setItem(inputs[i].id, inputs[i].value)
+                }
+
+            })
+        }
+    }
+    return localStorage.setItem('coeff', sumCoeff);
+}
+
+function findClosestNumber(refToFind, object){
+    for(let i = 0 ; i < Object.keys(object).length; i++){
+        coeff = Object.keys(object)[i];
+        // console.log(coeff);
+        if(coeff === refToFind){
+            localStorage.setItem('generalDiam',object[`${coeff}`])
+            return object[`${coeff}`]
+        } else {
+            coeff = Math.round(coeff);
+            if (coeff === refToFind){
+                localStorage.setItem('generalDiam',object[`${coeff}`])
+                return object[`${coeff}`]
+            } else {
+                console.log('Aucune valeur de ne correspond');
+            }
+    }
+}
+}
+
+setInputFromStorage();
+
+//!EVENT
+
+const deleteBtn = document.querySelectorAll(".btn--delete");
+for (let i = 0; i < deleteBtn.length; i++) {
+    deleteBtn[i].addEventListener('click', deleteEquipement);
+}
+
+calcButton.addEventListener('click', showInputValue);
+
+resetBtn.addEventListener('click', unsetInput)
+
+
+
+form.addEventListener('submit', function () {
+    findClosestNumber(localStorage.coeff,coefficiantDiametre)
+});
+    
+
+
+// function Helper 
+
+
+function ucFirst(string) {
     let str = string
     return (str.charAt(0).toUpperCase() + str.substring(1));
 }
 
-function lcFirst(string){
-// Mettre en minuscle la premiere lettre :
+function lcFirst(string) {
+    // Mettre en minuscle la premiere lettre :
     let str = string
     return (str.charAt(0).toLocaleLowerCase() + str.substring(1));
 }
-//bouton de soumission des données
-// const submitButton = document.querySelector('#submit-form')
-// console.log(submitButton);
-
-//recuperation des données des différents inputs
-// console.log(inputs);
-
-// en appuyant sur le bouton 
-//affiche la valeurs des inputs
-
-// balise P dans laquel on affiche la somme des coefficiants
-let p = document.createElement('p');
-calcButton.after(p)
-
-/// fonction pour calculer la somme des coefficiant des inputs et l'afficher
-function showInputValue () {
-        const inputs = document.querySelectorAll('.form-control')
-        let sumCoeff = 0;
-        for (let i = 0 ; i < inputs.length ; i++ ){
-            // Si l'input value est supérieur a 0 
-            if (inputs[i].value > 0){
-                // on recupere la somme des coefficients de chaques equipements
-                equipements.forEach(equipement => {
-                    equipement.name = lcFirst(equipement.name);
-                    if (equipement.name == inputs[i].id){
-                        sumCoeff += equipement.coeff * inputs[i].value;
-                    }
-                })
-            }
-        }
-        p.textContent = sumCoeff;
-    }
-
-// fonction pour calculer la somme des coefficiant des inputs
-// function sumCoeffEquipements (){
-//     let inputs = document.querySelectorAll('.form-control')
-//     // let sumCoeff = 0;
-//     for (let i = 0 ; i < inputs.length ; i++ ){
-//         // Si l'input value est supérieur a 0 
-//         if (inputs[i].value > 0 ){
-//             // console.log(inputs[i].id);
-//             for( let j = 0 ; j < equipements.length; j++){
-//                 inputs[i].id = ucFirst(inputs[i].id)
-//                 if (inputs[i].id === equipements[j].name){
-//                     sumCoeff += equipements[j].coeff * inputs[i].value;
-//                     console.log(sumCoeff);
-//                     // console.log(equipements[j].name);
-//                 }
-//             }
-//         }
-//     }
-//     // on recupere la somme des coefficients de chaques equipements 
-//     return sumCoeff;
-    
-// }
-
-
-calcButton.addEventListener('click', showInputValue)
-
-
-
-
-
-
-
-
-
-// function helpers strings 
-

@@ -28,7 +28,7 @@ body{
     font-size: 1.5rem;
     text-align: center;
 }
-.form{ 
+form{ 
     grid-column: 2 / 3;
 }
 .tHeader{
@@ -133,6 +133,7 @@ body{
     color: rgb(0, 0, 0);
     box-shadow: 10px 15px 10px 2px hsla(0, 0%, 0%, 0.329);
 }
+
 button[class*="btn--"]{
 
     height: 45px;
@@ -209,6 +210,8 @@ input:target{
 .hidden {
     display: none;
 }
+
+
 @media (max-width:768px){
     body{
         grid-template-columns: auto 1fr auto; 
