@@ -163,16 +163,22 @@ button svg{
     color: rgb(0, 0, 0);
 }
 
+.success {
+    background: #3ece86
+}
+.error {
+    background-color: #f58282;
+}
 .result{
     text-align: center;
-    display: flex;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    display: block;
+    margin: 2px 0;
+    padding: 10px;
     align-items: center;
     justify-content: center;
     grid-column: 2 / 3;
     border-radius: 5px;
-    background: #3ece86;
+    /* background: #3ece86; */
     font-size: 1.2rem;
     font-weight: 500;
     height: auto;

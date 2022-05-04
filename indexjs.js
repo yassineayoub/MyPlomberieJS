@@ -611,7 +611,7 @@ const coefficiantDiametre = {
 let tubes = JSON.parse(jsonTubes);
 let equipements = JSON.parse(jsonEquips);
 const tubeMat = ['cuivre','PER','multicouche','PEHD'];
-console.log(equipements);
+
 // equipements à afficher de base dans la page
 const equipementsToDontShow = ['Evier', 'Lavabo', 'Douche', 'WC', 'Lave-linge', 'Lave-vaisselle'];
 
@@ -623,6 +623,9 @@ const selectOptions = insertOptionToSelect(selectEquipement, equipements, equipe
 const formContainer = document.querySelector('.form.equip');
 //bouton d'ajouts des equipements
 const equipButton = document.querySelector("#equipSelectBtn");
+equipButton.addEventListener('click', function(e) {
+    e.preventDefault()
+})
 // bouton de calcul 
 const calcButton = document.createElement('button');
 calcButton.textContent = "Calculer";
@@ -630,9 +633,13 @@ calcButton.id = "submit-form";
 //Form selector
 const form = document.querySelector('form');
 
-const inputs = document.querySelectorAll('.form-control')
+
+
 //Reset button
 const resetBtn = document.createElement('button');
+resetBtn.addEventListener('click', function (e) {
+    e.preventDefault()
+})
 resetBtn.textContent = "Reset";
 
 //Secteur de tubes :
@@ -650,10 +657,11 @@ for (const tube of tubeMat) {
 equipements.forEach(equipement => {
     if (!isOptionToShowInSelect(equipement.name, equipementsToDontShow)) {
         // Pour chaque equipements présent dans l'array , on créer un input 
-        createInput(equipement.name)
+        createInput(equipement.name,equipement.coeff)
     }
 });
 
+const inputs = document.querySelectorAll('.form-control')
 formContainer.append(calcButton);
 formContainer.append(resetBtn)
 
@@ -684,25 +692,9 @@ function insertOptionToSelect(selectName, arrayToInsert, equipementsToDontShow) 
     }
 }
 
-equipButton.addEventListener('click', (e) => {
-    e.preventDefault()
-    let equipName = selectEquipement.value;
-    // on supprime les whitesSpaces
-    equipName = lcFirst(equipName.replace(/\s+/g, ''))
 
-    // console.log(createInput(selectEquipement.value));
-    // si l'equipement existe deja dans le DOM , 
-    if (document.querySelector('div.' + equipName) !== null) {
-        // alors on supprime l'option du select
-        // console.log(lcFirst(equipName))
-        let removeOption = document.querySelector('#equipSelect .' + equipName);
-        // console.log(removeOption);
-        selectEquipement.removeChild(removeOption);
-    }
 
-})
-
-function createInput(option) {
+function createInput(option,coeff) {
     // on met en minuscule la 1ere lettre
     optionClass = lcFirst(option);
     optionClass.replace(/\s+/g, '')
@@ -728,6 +720,7 @@ function createInput(option) {
     let formInput = document.createElement('input');
     formInput.classList.add('form-control')
     formInput.setAttribute('name', optionClass)
+    formInput.setAttribute('data-coeff',coeff);
     formInput.setAttribute("id", optionClass);
     divContainer.appendChild(formInput);
 
@@ -750,7 +743,6 @@ function deleteEquipement() {
 }
 
 
-
 /// fonction pour calculer la somme des coefficiant des inputs et l'afficher
 let sumTotal = 0;
 //Rend persistant les données entrée par l'utilisateur
@@ -762,7 +754,7 @@ function setInputFromStorage() {
 //clear les données en local Sstorage des inputs entrées par l'utilisateur
 function unsetInput() {
     inputs.forEach(element => {
-        localStorage.clear()
+        localStorage.clear();
     })
 }
 
@@ -787,6 +779,8 @@ function showInputValue(e) {
     }
     return localStorage.setItem('coeff', sumCoeff);
 }
+
+
 
 function findClosestNumber(refToFind, object){
     for(let i = 0 ; i < Object.keys(object).length; i++){
@@ -816,15 +810,16 @@ for (let i = 0; i < deleteBtn.length; i++) {
     deleteBtn[i].addEventListener('click', deleteEquipement);
 }
 
-calcButton.addEventListener('click', showInputValue);
+// calcButton.addEventListener('click', showInputValue);
 
 resetBtn.addEventListener('click', unsetInput)
 
 
 
-form.addEventListener('submit', function () {
-    findClosestNumber(localStorage.coeff,coefficiantDiametre)
-});
+// form.addEventListener('submit', function (e) {
+//     e.preventDefault()
+//     findClosestNumber(localStorage.coeff,coefficiantDiametre)
+// });
     
 
 
@@ -841,3 +836,105 @@ function lcFirst(string) {
     let str = string
     return (str.charAt(0).toLocaleLowerCase() + str.substring(1));
 }
+
+
+
+//* Span où l'on affichera le diametre général
+const spanGlobalResult = document.querySelector('#result');
+
+let url = "tube.json";
+let getOptions = {
+    method : "GET",
+    async: true,
+}
+
+
+
+/**
+ * Fonction qui permet de calculer la somme de tout les inputs * coefficant (data-coeff)
+ * @param {HTMLCollection} inputs 
+ * @returns number
+ */
+let calcInputsValue = function (inputs){
+    let globalCoefficiant = 0;
+    for( i = 0 ; i < inputs.length ; i++) {
+        console.log(inputs[i]);
+        globalCoefficiant += Number(inputs[i].value * inputs[i].dataset.coeff);
+    }
+
+    return globalCoefficiant;
+}
+
+/**
+ * Function qui calcul le diamètre minimal de l'alimentation générale
+ * @param {param} globalCoefficiant 
+ * @returns number | false
+ */
+let calcGlobalDiamMin = function (globalCoefficiant) {
+    let diamMinGlobal;
+    for (const key in coefficiantDiametre) {
+        if (globalCoefficiant === Number(key)){
+            console.log(coefficiantDiametre[key]);
+            diamMinGlobal = coefficiantDiametre[key];
+        }
+        
+    }
+    if (diamMinGlobal === undefined) {
+        return false;
+    }
+    return diamMinGlobal;
+}
+
+//TODO On peut modifier cette classe pour la rendre générique a tout les displays a afficher
+/**
+ * Function qui va afficher le diamètre minimum GENERAL dans le span 'spanGlobalResult'
+ * @param {param} diamMinGlobal // Le diamètre a afficher
+ * @param {*} elementClassorId // représente la classe ou l'id de l'element dans lequel on veut display le diametre
+ */
+let displayGlobalDiamMin = function (diamMinGlobal, elementClassorId){
+    const text = "Diamètre intérieur minimal du tuyau d'alimentation générale : ";
+    const appendTo = document.querySelector(elementClassorId);
+    console.log(appendTo);
+    return appendTo.textContent = text + diamMinGlobal + "mm";
+}
+
+/**
+ * 
+ * Function qui check si le Diamètre général minimum n'est pas hors champ.
+ * Si la valeur est hors champ on affiche un message d'erreur avec un fond rouge
+ * Si la le form est soumis sans aucune valeur fond rouge avec message d'erreur
+ * Sinon on affiche la valeur avec un fond vert
+ */
+//TODO Refaire les conditions pour afficher quand aucun input n'est saisi
+let checkValue = function (value) {
+    if (value === 0 && value === false) {
+        spanGlobalResult.className = "result error"
+        spanGlobalResult.innerHTML = "Erreur ! Veuillez saisir au moins un champ !";
+        exit();
+    } else if (!value || value > 20.1) {
+        spanGlobalResult.className = "result error"
+        spanGlobalResult.innerHTML = "Erreur ! Vous disposez de trop d'équipements pour utiliser cette méthode de calcul. <br/> <strong>La méthode 'Collective'</strong> serait plus appropriée."
+    } else {
+        displayGlobalDiamMin(value,"#result");
+        spanGlobalResult.className = "result success"
+    }
+}
+
+
+
+calcButton.addEventListener('click', function (e) {
+    e.preventDefault();
+    const globalCoefficiant = calcInputsValue(inputs);
+    console.log(globalCoefficiant);
+    const globalDiamMin = calcGlobalDiamMin(globalCoefficiant);
+    console.log(globalDiamMin);
+    checkValue(globalDiamMin);
+
+    
+    // $
+    //     .ajax(url,getOptions)
+    //     .then(success);
+
+});
+
+console.log($.ajax(url));
