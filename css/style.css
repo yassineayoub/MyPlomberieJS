@@ -171,14 +171,13 @@ button svg{
 }
 .result{
     text-align: center;
-    display: block;
+    display: flex;
     margin: 2px 0;
     padding: 10px;
     align-items: center;
     justify-content: center;
     grid-column: 2 / 3;
     border-radius: 5px;
-    /* background: #3ece86; */
     font-size: 1.2rem;
     font-weight: 500;
     height: auto;

@@ -21,6 +21,8 @@
     </div>
     
 <span id="result" class="hidden"></span>
+<span id="result2" class="hidden"></span>
+
 <form action="">
     <div class="form">
         <select name="equip" id="equipSelect">
@@ -34,6 +36,11 @@
                 <option value="">Choisissez un matériau</option>
             </select>
         </div>
+    </div>
+    <div class="divDescrib">
+        <p class = "pDescrib">Tube à installer par <strong><?= str_replace("_"," ",$equip[$i]->getName())?></strong> : </p>
+        <p class = "pDescrib">Diamètre <strong>intérieur minimal</strong> : <strong> <?= $diamMinTube?> mm </strong></p>
+        <p class = "pDescrib">Tube recommandé :<strong> <?=!empty($_POST['tube']) ? htmlspecialchars(ucfirst($_POST['tube'])) . " " . $tubeSizeChoice : "choisissez un matériau"?> </strong></p>
     </div>
 </form>
 

@@ -608,8 +608,8 @@ const coefficiantDiametre = {
     15: 20.1,
 }
 
-let tubes = JSON.parse(jsonTubes);
-let equipements = JSON.parse(jsonEquips);
+const tubes = JSON.parse(jsonTubes);
+const equipements = JSON.parse(jsonEquips);
 const tubeMat = ['cuivre','PER','multicouche','PEHD'];
 
 // equipements à afficher de base dans la page
@@ -700,7 +700,7 @@ function createInput(option,coeff) {
     optionClass.replace(/\s+/g, '')
 
     //creation de la div GENERAL pour chaque equipement
-    let formGroupDiv = document.createElement('div');
+    const formGroupDiv = document.createElement('div');
     //Ajout des différentes class :
     formGroupDiv.classList.add(optionClass.replace(/\s+/g, ''), 'form-group');
     document.querySelector('div.equip').appendChild(formGroupDiv)
@@ -801,7 +801,7 @@ function findClosestNumber(refToFind, object){
 }
 }
 
-setInputFromStorage();
+
 
 //!EVENT
 
@@ -858,11 +858,12 @@ let getOptions = {
 let calcInputsValue = function (inputs){
     let globalCoefficiant = 0;
     for( i = 0 ; i < inputs.length ; i++) {
-        console.log(inputs[i]);
-        globalCoefficiant += Number(inputs[i].value * inputs[i].dataset.coeff);
+        if (inputs[i] !== 0) {
+            globalCoefficiant += Number(inputs[i].value * inputs[i].dataset.coeff);
+        }
     }
+    return globalCoefficiant < 2 ? 2 : globalCoefficiant
 
-    return globalCoefficiant;
 }
 
 /**
@@ -894,8 +895,24 @@ let calcGlobalDiamMin = function (globalCoefficiant) {
 let displayGlobalDiamMin = function (diamMinGlobal, elementClassorId){
     const text = "Diamètre intérieur minimal du tuyau d'alimentation générale : ";
     const appendTo = document.querySelector(elementClassorId);
-    console.log(appendTo);
-    return appendTo.textContent = text + diamMinGlobal + "mm";
+    // console.log(appendTo);
+    return appendTo.textContent = text + diamMinGlobal + " mm";
+}
+
+/**
+ * Affiche le matériaux et le diametre necessaire dans la span du haut
+ * @param {element} matSelected Matériau selectionné par l'utilisateur
+ * @param {array} diamMinMat Diametres à afficher 
+ * @returns 
+ */
+function displayGlobalDiamMinWithMat(matSelected,diamMinMat) {
+
+    if (matSelected !== "" && diamMinMat !== ""){
+        const resultWithMat = document.querySelector('#result2');
+        resultWithMat.className = "result success";
+        return resultWithMat.innerHTML = `Tuyauterie à installer : <br />${ucFirst(matSelected)} : Ø${diamMinMat[0]} x ${diamMinMat[1]}mm (Ø ext / ep)`;
+
+    }
 }
 
 /**
@@ -905,36 +922,147 @@ let displayGlobalDiamMin = function (diamMinGlobal, elementClassorId){
  * Si la le form est soumis sans aucune valeur fond rouge avec message d'erreur
  * Sinon on affiche la valeur avec un fond vert
  */
-//TODO Refaire les conditions pour afficher quand aucun input n'est saisi
-let checkValue = function (value) {
-    if (value === 0 && value === false) {
+
+let checkValue = function (value , inputsValue) {
+    if (inputsValue === 0 && value === false) {
         spanGlobalResult.className = "result error"
         spanGlobalResult.innerHTML = "Erreur ! Veuillez saisir au moins un champ !";
-        exit();
+        return false;
     } else if (!value || value > 20.1) {
         spanGlobalResult.className = "result error"
         spanGlobalResult.innerHTML = "Erreur ! Vous disposez de trop d'équipements pour utiliser cette méthode de calcul. <br/> <strong>La méthode 'Collective'</strong> serait plus appropriée."
+        return false;
     } else {
         displayGlobalDiamMin(value,"#result");
         spanGlobalResult.className = "result success"
+        return true;
+    }
+}
+/**
+ * Recupère le matériaux choisi par l'utilisateur
+ * @returns 
+ */
+let getMat = function () {
+    return tubeSelector.value;
+}
+
+// On veut rechercher dans l'object le diamètre qui se rapproche de 'globalDiamMin' qui correspond au tube selectionné
+// on commence par selectionner tout les diametres qui correspondent au tube selectionné
+
+/**
+ * Récupère la 1ere array !undefined
+ * @param {Object} object Object dans lequel prendre le plus petit diametre
+ * @returns 
+ */
+const getMinDiam = function (object) {
+    for (const diameter of object) {
+        if (diameter !== undefined) {
+            return diameter;
+        }
     }
 }
 
 
 
+
+
+
+let displayDiamMinForEachEquip = function (equipementName) {
+    equipements.forEach(equip => {
+        if (equip.name === equipementName) {
+            let diamMin = equip.diamMin
+            return diamMin;
+        }
+    });
+}
+
+//TODO Arriver a afficher le diametre minimal et le diametre en fonction du materiau choisi.
+function createDivDescription () {
+    const formGroupDiv = document.querySelectorAll('.form-group')    
+    for (i = 0 ; i < formGroupDiv.length ; i++){
+        let equipementName = formGroupDiv[i].firstChild.textContent
+
+
+        const div = document.createElement('div');
+        div.classList.add('divDescrib');
+
+        const p = document.createElement('p');
+        p.classList.add('pDescrib');
+        p.innerHTML = `Tube à installer par <strong> ${formGroupDiv[i].firstChild.textContent} </strong> :`; 
+
+        const p1 = document.createElement('p');
+        p1.classList.add('pDescrib');
+        // p1.innerHTML = `Diamètre <strong>intérieur minimal</strong> : <strong> ${span.textContent} mm </strong></p>`
+
+        const p2 = document.createElement('p');
+        p2.classList.add('pDescrib');
+        // p2.innerHTML = `Tube recommandé :<strong> ${Afficher tube}  ${tubeSizeChoice}</strong>
+
+
+        div.append(p);
+        div.append(p1);
+        div.append(p2);
+        formGroupDiv[i].after(div);
+    }
+}
+createDivDescription()
+
+
+// let insertDivToFormGroup = function () {
+//     const formGroupDiv = document.querySelectorAll('.form-group')
+//     for (i = 0 ; i < formGroupDiv.length ; i++){
+        
+//     }
+// }
+// insertDivToFormGroup();
+
+
+
+
+
+
+
+
 calcButton.addEventListener('click', function (e) {
     e.preventDefault();
+
+    //Calcul du coefficiant global
     const globalCoefficiant = calcInputsValue(inputs);
-    console.log(globalCoefficiant);
+
+    // Calcul du diametre général minimal 
     const globalDiamMin = calcGlobalDiamMin(globalCoefficiant);
     console.log(globalDiamMin);
-    checkValue(globalDiamMin);
+
+    //Verification des champs et affichage dans la span en haut du form
+    checkValue(globalDiamMin,globalCoefficiant);
+
+    //Recupération du matériau séléctionné
+    const mat = getMat();
+    
+    //Callback qui trie l'object en fonction de son matériau et du diametre minimal
+    //Retour une array qui contient tout les diametres supérieur a globalDiamMin
+    let callbackTube = function (element) {
+        if (element.type == mat && globalDiamMin <= element.diamInt) {
+            return [element.diamExt,element.ep]
+        }
+    }
+
+    let tubeSelection = tubes.map(callbackTube);
+
+         //On selectionne l'array la plus petite du tableau mais plus grande que globalDiamMin
+    const diamGeneralToInstall = getMinDiam(tubeSelection);
+    //On display le resultat avec le materiau et le diametre à installer
+    displayGlobalDiamMinWithMat(mat,diamGeneralToInstall);
+    
+    
+   
+ 
+})
+
 
     
     // $
     //     .ajax(url,getOptions)
     //     .then(success);
-
-});
 
 console.log($.ajax(url));
