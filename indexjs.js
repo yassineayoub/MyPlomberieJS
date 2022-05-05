@@ -759,26 +759,26 @@ function unsetInput() {
 }
 
 // function qui va générer le diametre général du tube
-function showInputValue(e) {
-    // e.preventDefault()
-    let sumCoeff = 0;
-    // localStorage.clear();
-    for (let i = 0; i < inputs.length; i++) {
-        // Si l'input value est supérieur a 0 
-        if (inputs[i].value > 0) {
-            // on recupere la somme des coefficients de chaques equipements
-            equipements.forEach(equipement => {
-                equipement.name = lcFirst(equipement.name);
-                if (equipement.name == inputs[i].id) {
-                    sumCoeff += equipement.coeff * inputs[i].value;
-                    localStorage.setItem(inputs[i].id, inputs[i].value)
-                }
+// function showInputValue(e) {
+//     // e.preventDefault()
+//     let sumCoeff = 0;
+//     // localStorage.clear();
+//     for (let i = 0; i < inputs.length; i++) {
+//         // Si l'input value est supérieur a 0 
+//         if (inputs[i].value > 0) {
+//             // on recupere la somme des coefficients de chaques equipements
+//             equipements.forEach(equipement => {
+//                 equipement.name = lcFirst(equipement.name);
+//                 if (equipement.name == inputs[i].id) {
+//                     sumCoeff += equipement.coeff * inputs[i].value;
+//                     localStorage.setItem(inputs[i].id, inputs[i].value)
+//                 }
 
-            })
-        }
-    }
-    return localStorage.setItem('coeff', sumCoeff);
-}
+//             })
+//         }
+//     }
+//     return localStorage.setItem('coeff', sumCoeff);
+// }
 
 
 
@@ -862,7 +862,8 @@ let calcInputsValue = function (inputs){
             globalCoefficiant += Number(inputs[i].value * inputs[i].dataset.coeff);
         }
     }
-    return globalCoefficiant < 2 ? 2 : globalCoefficiant
+
+    return globalCoefficiant < 2 && globalCoefficiant > 0 ? 2 : globalCoefficiant
 
 }
 
@@ -963,65 +964,72 @@ const getMinDiam = function (object) {
 }
 
 
-
-
-
-
-let displayDiamMinForEachEquip = function (equipementName) {
-    equipements.forEach(equip => {
-        if (equip.name === equipementName) {
-            let diamMin = equip.diamMin
-            return diamMin;
+function minDiamFormLabel (formGroup) {
+        for (const equip of equipements) {
+            if(formGroup.firstChild.textContent === equip.name){
+                return equip.diamMin;
+            };
         }
-    });
+}
+// minDiamFormLabel()
+/**
+ * Retourne true si l'input est vide ou false s'il est remmpli
+ * @param {*} formGroupDiv 
+ */
+function isEmpty(value) {
+    if(value === 0 || value === undefined || value === "" ) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-//TODO Arriver a afficher le diametre minimal et le diametre en fonction du materiau choisi.
+//TODO Arriver a afficher le diametre minimal et le diametre en fonction du materiau
 function createDivDescription () {
     const formGroupDiv = document.querySelectorAll('.form-group')    
     for (i = 0 ; i < formGroupDiv.length ; i++){
+        //on récupère la valeur de l'input contenu dans chaque formGroupDiv
+        const inputValue = formGroupDiv[i].children[1].firstChild.value
+        //Si l'input n'est pas vide on exécute le code
+        let diamMin = minDiamFormLabel(formGroupDiv[i])
         let equipementName = formGroupDiv[i].firstChild.textContent
 
-
+        //On créer la div qui va contenir les 3 p d'informations
         const div = document.createElement('div');
         div.classList.add('divDescrib');
-
+        div.classList.add('hidden');
+        
         const p = document.createElement('p');
         p.classList.add('pDescrib');
-        p.innerHTML = `Tube à installer par <strong> ${formGroupDiv[i].firstChild.textContent} </strong> :`; 
+        p.innerHTML = `Tube à installer par <strong> ${equipementName} </strong> :`; 
 
         const p1 = document.createElement('p');
         p1.classList.add('pDescrib');
-        // p1.innerHTML = `Diamètre <strong>intérieur minimal</strong> : <strong> ${span.textContent} mm </strong></p>`
+        p1.innerHTML = `Diamètre <strong>intérieur minimal</strong> : <strong> ${diamMin} mm </strong></p>`
 
         const p2 = document.createElement('p');
         p2.classList.add('pDescrib');
         // p2.innerHTML = `Tube recommandé :<strong> ${Afficher tube}  ${tubeSizeChoice}</strong>
 
-
         div.append(p);
         div.append(p1);
         div.append(p2);
         formGroupDiv[i].after(div);
+        
     }
 }
 createDivDescription()
 
-
-// let insertDivToFormGroup = function () {
-//     const formGroupDiv = document.querySelectorAll('.form-group')
-//     for (i = 0 ; i < formGroupDiv.length ; i++){
-        
-//     }
-// }
-// insertDivToFormGroup();
-
-
-
-
-
-
-
+/**
+ * Retourne 
+ * @param {number} minDiam 
+ */
+function getTubeSize(minDiam,mat) {
+    for (const tube of tubes) {
+        if (tube.diamInt >= minDiam && tube.type === mat)
+        return tube.diamInt
+    }
+}
 
 calcButton.addEventListener('click', function (e) {
     e.preventDefault();
@@ -1053,9 +1061,29 @@ calcButton.addEventListener('click', function (e) {
     const diamGeneralToInstall = getMinDiam(tubeSelection);
     //On display le resultat avec le materiau et le diametre à installer
     displayGlobalDiamMinWithMat(mat,diamGeneralToInstall);
+
+    const formInput = document.querySelectorAll('.form-control')
+    console.log(formInput);
+    for (const input of formInput) {
+
+        if(parseInt(input.value) > 0){
+            let describ = input.parentNode.nextSibling.parentNode.nextSibling;
+            describ.classList.remove('hidden');
+        }
+    }
+//TODO il faut qu'en cliquant , on fasse l'append des different p.innerHTML ( les sortirs de l'autre fonction)
+//TODO ON fait un p:lastchild de la divDescrib et on append le innerHTML avec les bonnes values;
+    //Regrouper tout les diamtre min de tube
+    // const formGroupDiv = document.querySelectorAll('.form-group')    
+    // for (i = 0 ; i < formGroupDiv.length ; i++){
+    //    let minDiam = minDiamFormLabel(formGroupDiv[i]);
+    // }
     
-    
-   
+    //     for (const tube of tubes) {
+    //         if(tube.type === mat && tube.diamInt <= minDiam){
+    //             console.log(tube.diamInt);
+    //     }
+    // }
  
 })
 
