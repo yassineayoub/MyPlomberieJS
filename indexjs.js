@@ -617,17 +617,20 @@ const equipementsToDontShow = ['Evier', 'Lavabo', 'Douche', 'WC', 'Lave-linge', 
 
 // import des équipements dans le select
 const selectEquipement = document.querySelector('#equipSelect');
+selectEquipement.classList.add('select')
 // on boucle sur la fonction pour inserer chaque equipement(options) dans le select
 const selectOptions = insertOptionToSelect(selectEquipement, equipements, equipementsToDontShow);
 //div container ( balise form )
 const formContainer = document.querySelector('.form.equip');
 //bouton d'ajouts des equipements
 const equipButton = document.querySelector("#equipSelectBtn");
+equipButton.classList.add('selectBtn')
 equipButton.addEventListener('click', function(e) {
     e.preventDefault()
 })
 // bouton de calcul 
 const calcButton = document.createElement('button');
+calcButton.classList.add('btn')
 calcButton.textContent = "Calculer";
 calcButton.id = "submit-form";
 //Form selector
@@ -636,14 +639,14 @@ const form = document.querySelector('form');
 
 
 //Reset button
-const resetBtn = document.createElement('button');
-resetBtn.addEventListener('click', function (e) {
-    e.preventDefault()
-})
+const resetBtn = document.createElement('a');
+resetBtn.className = ('reset')
+resetBtn.href = window.location.href;
 resetBtn.textContent = "Reset";
 
 //Secteur de tubes :
 const tubeSelector = document.querySelector('#tubeSelector');
+tubeSelector.classList.add('select')
 for (const tube of tubeMat) {
     const tubeOption = document.createElement('option');
     tubeOption.textContent = ucFirst(tube);
@@ -742,88 +745,15 @@ function deleteEquipement() {
     this.closest(".form-group").remove()
 }
 
-
-/// fonction pour calculer la somme des coefficiant des inputs et l'afficher
-let sumTotal = 0;
-//Rend persistant les données entrée par l'utilisateur
-function setInputFromStorage() {
-    inputs.forEach(element => {
-        element.value = localStorage.getItem(element.id);
-    })
-}
-//clear les données en local Sstorage des inputs entrées par l'utilisateur
-function unsetInput() {
-    inputs.forEach(element => {
-        localStorage.clear();
-    })
-}
-
-// function qui va générer le diametre général du tube
-// function showInputValue(e) {
-//     // e.preventDefault()
-//     let sumCoeff = 0;
-//     // localStorage.clear();
-//     for (let i = 0; i < inputs.length; i++) {
-//         // Si l'input value est supérieur a 0 
-//         if (inputs[i].value > 0) {
-//             // on recupere la somme des coefficients de chaques equipements
-//             equipements.forEach(equipement => {
-//                 equipement.name = lcFirst(equipement.name);
-//                 if (equipement.name == inputs[i].id) {
-//                     sumCoeff += equipement.coeff * inputs[i].value;
-//                     localStorage.setItem(inputs[i].id, inputs[i].value)
-//                 }
-
-//             })
-//         }
-//     }
-//     return localStorage.setItem('coeff', sumCoeff);
-// }
-
-
-
-function findClosestNumber(refToFind, object){
-    for(let i = 0 ; i < Object.keys(object).length; i++){
-        coeff = Object.keys(object)[i];
-        // console.log(coeff);
-        if(coeff === refToFind){
-            localStorage.setItem('generalDiam',object[`${coeff}`])
-            return object[`${coeff}`]
-        } else {
-            coeff = Math.round(coeff);
-            if (coeff === refToFind){
-                localStorage.setItem('generalDiam',object[`${coeff}`])
-                return object[`${coeff}`]
-            } else {
-                console.log('Aucune valeur de ne correspond');
-            }
-    }
-}
-}
-
-
-
 //!EVENT
 
 const deleteBtn = document.querySelectorAll(".btn--delete");
+
 for (let i = 0; i < deleteBtn.length; i++) {
     deleteBtn[i].addEventListener('click', deleteEquipement);
 }
 
-// calcButton.addEventListener('click', showInputValue);
 
-resetBtn.addEventListener('click', unsetInput)
-
-
-
-// form.addEventListener('submit', function (e) {
-//     e.preventDefault()
-//     findClosestNumber(localStorage.coeff,coefficiantDiametre)
-// });
-    
-
-
-// function Helper 
 
 
 function ucFirst(string) {
@@ -836,6 +766,7 @@ function lcFirst(string) {
     let str = string
     return (str.charAt(0).toLocaleLowerCase() + str.substring(1));
 }
+
 
 
 
@@ -887,7 +818,7 @@ let calcGlobalDiamMin = function (globalCoefficiant) {
     return diamMinGlobal;
 }
 
-//TODO On peut modifier cette classe pour la rendre générique a tout les displays a afficher
+
 /**
  * Function qui va afficher le diamètre minimum GENERAL dans le span 'spanGlobalResult'
  * @param {param} diamMinGlobal // Le diamètre a afficher
@@ -911,7 +842,7 @@ function displayGlobalDiamMinWithMat(matSelected,diamMinMat) {
     if (matSelected !== "" && diamMinMat !== ""){
         const resultWithMat = document.querySelector('#result2');
         resultWithMat.className = "result success";
-        return resultWithMat.innerHTML = `Tuyauterie à installer : <br />${ucFirst(matSelected)} : Ø${diamMinMat[0]} x ${diamMinMat[1]}mm (Ø ext / ep)`;
+        return resultWithMat.innerHTML = `<strong>Tuyau d'alimentation général recommandé : <br />${ucFirst(matSelected)} : Ø ${diamMinMat[0]} x ${diamMinMat[1]} mm </strong>(Ø ext / epaisseur)`;
 
     }
 }
@@ -971,7 +902,7 @@ function minDiamFormLabel (formGroup) {
             };
         }
 }
-// minDiamFormLabel()
+
 /**
  * Retourne true si l'input est vide ou false s'il est remmpli
  * @param {*} formGroupDiv 
@@ -984,7 +915,10 @@ function isEmpty(value) {
     }
 }
 
-//TODO Arriver a afficher le diametre minimal et le diametre en fonction du materiau
+/**
+ *Créer la déscription pour chaques equipements //
+ * Renvoi le tube a installer et le diametre minimal
+ */
 function createDivDescription () {
     const formGroupDiv = document.querySelectorAll('.form-group')    
     for (i = 0 ; i < formGroupDiv.length ; i++){
@@ -1005,21 +939,17 @@ function createDivDescription () {
 
         const p1 = document.createElement('p');
         p1.classList.add('pDescrib');
-        p1.innerHTML = `Diamètre <strong>intérieur minimal</strong> : <strong> ${diamMin} mm </strong></p>`
+        p1.innerHTML = `Diamètre <strong>intérieur minimal</strong> : <strong> ${diamMin} mm </strong>`
 
         const p2 = document.createElement('p');
         p2.classList.add('pDescrib');
-        // p2.innerHTML = `Tube recommandé :<strong> ${Afficher tube}  ${tubeSizeChoice}</strong>
 
         div.append(p);
         div.append(p1);
         div.append(p2);
         formGroupDiv[i].after(div);
-        
     }
 }
-createDivDescription()
-
 /**
  * Retourne 
  * @param {number} minDiam 
@@ -1030,8 +960,55 @@ function getTubeSize(minDiam,mat) {
         return tube.diamInt
     }
 }
+// Récupere le diametre interieur minimal en fonction de l'équipement saisie
+function minSizeEquip (equipName) {
+    for (const item of equipements) {
+        if (equipName === item.name){
+            return item.diamMin;
+        }
+    }
+}
+// Retourne le matériau , le diamExt et l'epaisseur du tube à installer
+function getDiamPerEquip (diamMinEquip) {
+    let value = []
+    for (const tube of tubes) {
+        if (tube.type === getMat() && tube.diamInt >= diamMinEquip){
+             return value = [ucFirst(tube.type),tube.diamExt,tube.ep]  
+        }
+    }
+    return value;
+}
 
-calcButton.addEventListener('click', function (e) {
+let handleInsertEquipTube = function (e) {
+    e.preventDefault()
+    // on recupere tout les form-labels 
+    let formLabels = document.querySelectorAll('.form-label')
+    // Pour chaque label, on récupere le LabelName
+    for (const labels of formLabels) {
+        //Nom de chaque input affiché // Evier , Lavabo ...
+        const labelName = labels.textContent
+        //Diametre min en fonction de l'équipement ex : Evier = 12
+        const sizeMin = minSizeEquip(labelName);   
+        //Tube à installer [cuivre,diamExt,epaisseur] 
+        const tubeToInstall = getDiamPerEquip(sizeMin);
+        //On créer le text à afficher dans le paragraphe en question
+        let text = "";
+        if(tubeToInstall.length !== 0){
+            text = `Tube recommandé :<strong>  ${tubeToInstall[0]} Ø ${tubeToInstall[1]} x ${tubeToInstall[2]} mm </strong>`
+        } else {
+            text ="Tube recommandé : <strong>Veuillez choisir un matériau</strong>";
+        }
+        //On va chercher le pDescrib dans lequel modifier le text 
+        let pDescrib = labels.parentNode.nextSibling.lastChild;
+        //On modifie le textContent :
+        pDescrib.innerHTML = text;
+    }
+    
+}
+
+
+   
+let handleInsertGereralTube = function (e){
     e.preventDefault();
 
     //Calcul du coefficiant global
@@ -1042,7 +1019,7 @@ calcButton.addEventListener('click', function (e) {
     console.log(globalDiamMin);
 
     //Verification des champs et affichage dans la span en haut du form
-    checkValue(globalDiamMin,globalCoefficiant);
+    const verif = checkValue(globalDiamMin,globalCoefficiant);
 
     //Recupération du matériau séléctionné
     const mat = getMat();
@@ -1057,40 +1034,25 @@ calcButton.addEventListener('click', function (e) {
 
     let tubeSelection = tubes.map(callbackTube);
 
-         //On selectionne l'array la plus petite du tableau mais plus grande que globalDiamMin
+    //On selectionne l'array la plus petite du tableau mais plus grande que globalDiamMin
     const diamGeneralToInstall = getMinDiam(tubeSelection);
     //On display le resultat avec le materiau et le diametre à installer
-    displayGlobalDiamMinWithMat(mat,diamGeneralToInstall);
+    if(verif) {
+        displayGlobalDiamMinWithMat(mat,diamGeneralToInstall);
+    }
 
     const formInput = document.querySelectorAll('.form-control')
-    console.log(formInput);
-    for (const input of formInput) {
 
+    for (const input of formInput) {
         if(parseInt(input.value) > 0){
             let describ = input.parentNode.nextSibling.parentNode.nextSibling;
             describ.classList.remove('hidden');
         }
     }
-//TODO il faut qu'en cliquant , on fasse l'append des different p.innerHTML ( les sortirs de l'autre fonction)
-//TODO ON fait un p:lastchild de la divDescrib et on append le innerHTML avec les bonnes values;
-    //Regrouper tout les diamtre min de tube
-    // const formGroupDiv = document.querySelectorAll('.form-group')    
-    // for (i = 0 ; i < formGroupDiv.length ; i++){
-    //    let minDiam = minDiamFormLabel(formGroupDiv[i]);
-    // }
-    
-    //     for (const tube of tubes) {
-    //         if(tube.type === mat && tube.diamInt <= minDiam){
-    //             console.log(tube.diamInt);
-    //     }
-    // }
- 
-})
+}
 
 
-    
-    // $
-    //     .ajax(url,getOptions)
-    //     .then(success);
 
-console.log($.ajax(url));
+createDivDescription()
+calcButton.addEventListener('click', handleInsertGereralTube)
+calcButton.addEventListener('click', handleInsertEquipTube) 

@@ -8,6 +8,7 @@
     <script src="https://kit.fontawesome.com/c51932627d.js" crossorigin="anonymous"></script>
     <script src="node_modules\jquery\dist\jquery.js" defer></script>
     <script src="indexjs.js" defer></script>
+   
     <title>Document</title>
 </head>
 <body>
@@ -23,12 +24,12 @@
 <span id="result" class="hidden"></span>
 <span id="result2" class="hidden"></span>
 
-<form action="">
+<form action="#">
     <div class="form">
         <select name="equip" id="equipSelect">
-            <option value="">Choisissez un équipement</option>
+            <option value="">Ajouter un équipement ?</option>
         </select>
-        <button id="equipSelectBtn">Sélectionner</button>
+        <button id="equipSelectBtn">Ajouter</button>
     </div>
     <div class="form equip">
         <div>
@@ -37,21 +38,7 @@
             </select>
         </div>
     </div>
-    <div class="divDescrib">
-        <p class = "pDescrib">Tube à installer par <strong><?= str_replace("_"," ",$equip[$i]->getName())?></strong> : </p>
-        <p class = "pDescrib">Diamètre <strong>intérieur minimal</strong> : <strong> <?= $diamMinTube?> mm </strong></p>
-        <p class = "pDescrib">Tube recommandé :<strong> <?=!empty($_POST['tube']) ? htmlspecialchars(ucfirst($_POST['tube'])) . " " . $tubeSizeChoice : "choisissez un matériau"?> </strong></p>
-    </div>
 </form>
 
-
-
- <!-- SELECTION DES MATERIAUX  -->
-    <!-- <form action="#" method="GET">
-        <select name="tube">
-            <option value="">Choisissez un matériau</option>
-            <option value=""></option>
-        </select>
-    </form> -->
 </body>
 </html>

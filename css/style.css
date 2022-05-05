@@ -106,7 +106,7 @@ form{
 }
 
 .select option:nth-child(2n){
-    background: #B4C8E0;
+    background: #b4c8e04a;
 }
 .select{
     width: 100%;
@@ -116,8 +116,38 @@ form{
     font-size: 1.2rem;
     border-radius: 5px;
     margin-top: 10px;
-
+    margin-bottom: 5px;
 }
+.select#equipSelect  {
+    width: 50%;
+    /* text-align: center; */
+    /* margin: auto; */
+    height: 40px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+#equipSelect option {
+    margin-top: 5px;
+    height: 40px;
+}
+.selectBtn{
+    text-decoration: none;
+    padding: 5px;
+    height: 100%;
+    font-size: 1.2rem;
+    border: solid 1px;
+    cursor: pointer;
+    background: #988BAD;
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+}
+.form.equip {
+    display: flex;
+    flex-direction: column;
+    gap: 5px
+}
+
 .btn{
     
     width: 100%;
@@ -131,7 +161,7 @@ form{
     /* border: solid 1px black; */
     border-radius: 5px;
     color: rgb(0, 0, 0);
-    box-shadow: 10px 15px 10px 2px hsla(0, 0%, 0%, 0.329);
+    box-shadow: 3px 3px 10px 2px hsla(0, 0%, 0%, 0.329);
 }
 
 button[class*="btn--"]{
@@ -149,15 +179,17 @@ button svg{
    width: 100%;  
 }
 
+
 .reset{
     display: flex;
+    text-align: center;
+    margin: auto;
     justify-content: center;
-}   
-.reset .resetLink {
     text-decoration: none;
     padding: 5px;
     font-size: 1.2rem;
     border: solid 1px;
+    cursor: pointer;
     background: #988BAD;
     border-radius: 5px;
     color: rgb(0, 0, 0);
@@ -171,7 +203,6 @@ button svg{
 }
 .result{
     text-align: center;
-    display: flex;
     margin: 2px 0;
     padding: 10px;
     align-items: center;
@@ -194,11 +225,12 @@ button svg{
     border-radius: 15px;
 }
 
+
 .divDescrib {
     border: solid 1px;
     border-top: 0px;
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     margin-top: 0;
 }
 .pDescrib:first-of-type{
