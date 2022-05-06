@@ -5,19 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://kit.fontawesome.com/c51932627d.js" crossorigin="anonymous"></script>
     <script src="node_modules\jquery\dist\jquery.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <script src="indexjs.js" defer></script>
    
     <title>Document</title>
 </head>
 <body>
+    <h1 class="title">Dimensionner son réseau d'eau sanitaire en maison individuelle</h1>
     <div class="htmlInstructions">
         <ol>
             <li>Pour chaque équipements, entrez la quantitée que vous souhaitez installer.</li>
+            <li>Vous pouvez ajouter un ou plusieurs équipements à la liste</li>
             <li>Choisissez un matériau si vous le souhaitez.</li>
-            <li>Appuyez sur "Dimensionner".</li>
-            <li>Pour connaître le diamètre de l'évacuation, cliquez sur le bouton ci-dessous.</li>
+            <li>Appuyez sur "Calculer".</li>
+            <li>Pour réinitialiser , appuyez sur le bouton Reset</li>
+            <!-- <li>Pour connaître le diamètre de l'évacuation, cliquez sur le bouton ci-dessous.</li> -->
         </ol>
     </div>
     
@@ -29,7 +32,7 @@
         <select name="equip" id="equipSelect">
             <option value="">Ajouter un équipement ?</option>
         </select>
-        <button id="equipSelectBtn">Ajouter</button>
+        <button id="equipSelectBtn"><i class="bi bi-arrow-down-square" style="height: 100%;"></i>Ajouter</button>
     </div>
     <div class="form equip">
         <div>

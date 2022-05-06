@@ -51,7 +51,7 @@ if($diamMin === null ){
 </head>
 <body>
     <div class="headerContainer">
-        <h1 class="title">Dimensionner son réseau d'eau sanitaire en maison individuelle</h1>
+        
         <!-- Affichage du diametre min  -->
         <!-- Si une valeur est selectionné : -->
         <?= $html->instructions($_POST) ?>

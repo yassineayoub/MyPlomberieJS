@@ -74,8 +74,8 @@ form{
 .form-control{
     display: flex;
     margin: 0;
-    width: 80px;
-    padding-left: 12px;
+    width: 60px;
+    /* padding-left: 12px; */
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -131,6 +131,11 @@ form{
     margin-top: 5px;
     height: 40px;
 }
+#equipSelectBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 .selectBtn{
     text-decoration: none;
     padding: 5px;
@@ -151,10 +156,12 @@ form{
 .btn{
     
     width: 100%;
+    display: flex;
     cursor: pointer;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    flex-grow: 1;
+    justify-content: center;
+    margin: 10px 0;
+    /* flex-grow: 1; */
+    align-items: flex-end;
     height: 45px;
     font-size: 2rem;
     background: #988BAD;
@@ -165,13 +172,16 @@ form{
 }
 
 button[class*="btn--"]{
-
     height: 45px;
-    width: 45px;
+    width: 50px;
     background: #988BAD;
     cursor: pointer;
     border: solid 1px black;
     border-radius: 5px;
+}
+.btn--delete {
+    width: 45px;
+    height: 45px;
 }
 
 button svg{
@@ -247,6 +257,15 @@ input:target{
 .hidden {
     display: none;
 }
+
+
+
+
+
+
+
+
+
 
 
 @media (max-width:768px){

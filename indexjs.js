@@ -729,6 +729,7 @@ function createInput(option,coeff) {
     formInput.setAttribute('name', optionClass)
     formInput.setAttribute('data-coeff',coeff);
     formInput.setAttribute("id", optionClass);
+    formInput.setAttribute("placeholder", "qt")
     divContainer.appendChild(formInput);
 
     //ajout du divContainer au form group
@@ -736,8 +737,9 @@ function createInput(option,coeff) {
     formGroupDiv.appendChild(divContainer)
 
     //insertion button 
-    let deleteBtn = document.createElement('button');
+    let deleteBtn = document.createElement('div');
     // deleteBtn.classList.add('btn--' + optionClass.replace(/\s+/g,''));
+    deleteBtn.innerHTML = '<i class="bi bi-x-square" style="display:flex ; height: 100%; font-size: 45px ; width: 100%"></i>'
     deleteBtn.classList.add('btn--delete');
 
     formGroupDiv.appendChild(deleteBtn);
