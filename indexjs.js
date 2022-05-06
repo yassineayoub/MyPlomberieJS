@@ -504,7 +504,7 @@ let jsonEquips = JSON.stringify([{
         "name": "Baignoire ≤ 150 L"
     },
     {
-        "coeff": 3.2,
+        "coeff": 3.5,
         "debitMin": 0.33,
         "diamEvac": 50,
         "diamMin": 13,
@@ -549,7 +549,7 @@ let jsonEquips = JSON.stringify([{
         "diamEvac": 32,
         "diamMin": 10,
         "id": 10,
-        "name": "Lave mains"
+        "name": "Lave-mains"
     },
     {
         "coeff": 2,
@@ -623,26 +623,26 @@ const selectOptions = insertOptionToSelect(selectEquipement, equipements, equipe
 //div container ( balise form )
 const formContainer = document.querySelector('.form.equip');
 //bouton d'ajouts des equipements
-const equipButton = document.querySelector("#equipSelectBtn");
-equipButton.classList.add('selectBtn')
-equipButton.addEventListener('click', function(e) {
+const addEquipButton = document.querySelector("#equipSelectBtn");
+addEquipButton.classList.add('selectBtn')
+addEquipButton.addEventListener('click', function(e) {
     e.preventDefault()
 })
 // bouton de calcul 
-const calcButton = document.createElement('button');
-calcButton.classList.add('btn')
-calcButton.textContent = "Calculer";
-calcButton.id = "submit-form";
+const calcButton = document.querySelector('#submit-form');
+// calcButton.classList.add('btn')
+// calcButton.textContent = "Calculer";
+// calcButton.id = "submit-form";
 //Form selector
 const form = document.querySelector('form');
 
-
+// Tout les inputs 
 
 //Reset button
-const resetBtn = document.createElement('a');
-resetBtn.className = ('reset')
-resetBtn.href = window.location.href;
-resetBtn.textContent = "Reset";
+const resetBtn = document.querySelector('a.reset');
+// resetBtn.className = ('reset')
+// resetBtn.href = window.location.href;
+// resetBtn.textContent = "Reset";
 
 //Secteur de tubes :
 
@@ -668,9 +668,8 @@ equipements.forEach(equipement => {
     }
 });
 
-const inputs = document.querySelectorAll('.form-control')
-formContainer.append(calcButton);
-formContainer.append(resetBtn)
+
+
 
 // fonction pour choisir les élément a ne pas afficher dans le select
 function isOptionToShowInSelect(items, itemsToDontShow) {
@@ -700,11 +699,10 @@ function insertOptionToSelect(selectName, arrayToInsert, equipementsToDontShow) 
 }
 
 
-
-function createInput(option,coeff) {
+function createInput(equipName,coeff) {
     // on met en minuscule la 1ere lettre
-    optionClass = lcFirst(option);
-    optionClass.replace(/\s+/g, '')
+    optionClass = stringGroup(lcFirst(equipName));
+    // optionClass.replace(/\s+/g, '')
 
     //creation de la div GENERAL pour chaque equipement
     const formGroupDiv = document.createElement('div');
@@ -720,7 +718,7 @@ function createInput(option,coeff) {
     let formLabel = document.createElement('label');
     formLabel.classList.add('form-label');
     formLabel.setAttribute('for', optionClass);
-    formLabel.innerHTML = option;
+    formLabel.innerHTML = equipName;
     formGroupDiv.appendChild(formLabel);
 
     //creation du form Input
@@ -746,16 +744,82 @@ function createInput(option,coeff) {
 
 }
 
+//!
+/**
+ * Retourne le coefficant correspondant a l'équipement
+ * @param {string} equipName Nom de l'équipement
+ */
+function getCoeffEquip (equipName) {
+    for (const equip of equipements) {
+        if (equip.name === equipName) {
+            return equip.coeff;
+        }
+    }
+}
+/**
+ * Retourne le diametre interieur minimal en fonction du nom de l'équipement
+ * @param {string} equipName Nom de l'équipement
+ */
+function getDiamMinEquip(equipName){
+    for (const equip of equipements) {
+        if (equip.name === equipName) {
+            console.log(equip.diamMin);
+            return equip.diamMin;
+        }
+    }
+}
 
 
-//DELETE BUTTON + EVENT
+//On veut que l'element du select s'ajoute a la liste des matériaux 
+let handleAddEquipement = function () {
+    let equipName = selectEquipement.value;
+   let equipCoeff = getCoeffEquip(equipName);
+   console.log(equipCoeff);
+   createInput(equipName, getCoeffEquip(equipName));
+
+    let divContainer = document.querySelector(`.${stringGroup(lcFirst(equipName))}.form-group`)
+
+      //On créer la div qui va contenir les 3 p d'informations
+      const div = document.createElement('div');
+      div.classList.add('divDescrib');
+      div.classList.add('hidden');
+      
+      const p = document.createElement('p');
+      p.classList.add('pDescrib');
+      p.innerHTML = `Tube à installer par <strong> ${equipName} </strong> :`; 
+
+      const p1 = document.createElement('p');
+      p1.classList.add('pDescrib');
+      p1.innerHTML = `Diamètre <strong>intérieur minimal</strong> : <strong> ${getDiamMinEquip(equipName)} mm </strong>`
+
+      const p2 = document.createElement('p');
+      p2.classList.add('pDescrib');
+      
+      div.append(p);
+        div.append(p1);
+        div.append(p2);
+        divContainer.after(div);
+
+        //Rend les boutons ajoutés supprimable
+        const deleteBtn = document.querySelectorAll(".btn--delete");
+        for (let i = 0; i < deleteBtn.length; i++) {
+            deleteBtn[i].addEventListener('click', handlerdeleteEquipement);
+        }
+        
+}
+
+
 const deleteBtn = document.querySelectorAll(".btn--delete");
-function deleteEquipement() {
+for (let i = 0; i < deleteBtn.length; i++) {
+    deleteBtn[i].addEventListener('click', handlerdeleteEquipement);
+}
+
+
+//supprime le form-group div le plus proche du bouton "btn--delete"
+function handlerdeleteEquipement() {
     this.closest(".form-group").remove()
 }
-for (let i = 0; i < deleteBtn.length; i++) {
-    deleteBtn[i].addEventListener('click', deleteEquipement);
-}
+
 
 
 
@@ -792,7 +856,9 @@ let getOptions = {
  */
 let calcInputsValue = function (inputs){
     let globalCoefficiant = 0;
+    console.log(inputs);
     for( i = 0 ; i < inputs.length ; i++) {
+        console.log(inputs[i]);
         if (inputs[i] !== 0) {
             globalCoefficiant += Number(inputs[i].value * inputs[i].dataset.coeff);
         }
@@ -800,6 +866,10 @@ let calcInputsValue = function (inputs){
 
     return globalCoefficiant < 2 && globalCoefficiant > 0 ? 2 : globalCoefficiant
 
+}
+//Function pour mettre des tirets dans les string si elle presente des espaces de nom, exemple poste d'eau = poste-d'eau
+function stringGroup (name){
+    return name.replace(/((?<![\\])[\s\/'"])/g,"_");
 }
 
 /**
@@ -811,7 +881,7 @@ let calcGlobalDiamMin = function (globalCoefficiant) {
     let diamMinGlobal;
     for (const key in coefficiantDiametre) {
         if (globalCoefficiant === Number(key)){
-            console.log(coefficiantDiametre[key]);
+            // console.log(coefficiantDiametre[key]);
             diamMinGlobal = coefficiantDiametre[key];
         }
         
@@ -946,13 +1016,15 @@ function createDivDescription () {
 
         const p2 = document.createElement('p');
         p2.classList.add('pDescrib');
-
+        
         div.append(p);
         div.append(p1);
         div.append(p2);
         formGroupDiv[i].after(div);
+        
     }
 }
+
 /**
  * Retourne 
  * @param {number} minDiam 
@@ -983,8 +1055,6 @@ function getDiamPerEquip (diamMinEquip) {
 }
 
 
-
-
 let handleInsertEquipTube = function (e) {
     e.preventDefault()
     // on recupere tout les form-labels 
@@ -993,9 +1063,11 @@ let handleInsertEquipTube = function (e) {
     for (const labels of formLabels) {
         //Nom de chaque input affiché // Evier , Lavabo ...
         const labelName = labels.textContent
+        console.log(labelName);
         //Diametre min en fonction de l'équipement ex : Evier = 12
         const sizeMin = minSizeEquip(labelName);   
         //Tube à installer [cuivre,diamExt,epaisseur] 
+        console.log(sizeMin);
         const tubeToInstall = getDiamPerEquip(sizeMin);
         //On créer le text à afficher dans le paragraphe en question
         let text = "";
@@ -1019,9 +1091,11 @@ let handleInsertEquipTube = function (e) {
  */
 let handleInsertGereralTube = function (e){
     e.preventDefault();
-
+    const inputs = document.querySelectorAll('.form-control')
     //Calcul du coefficiant global
     const globalCoefficiant = calcInputsValue(inputs);
+    console.log(globalCoefficiant);
+
 
     // Calcul du diametre général minimal 
     const globalDiamMin = calcGlobalDiamMin(globalCoefficiant);
@@ -1063,5 +1137,6 @@ let handleInsertGereralTube = function (e){
 
 
 createDivDescription()
-calcButton.addEventListener('click', handleInsertGereralTube)
+addEquipButton.addEventListener('click',handleAddEquipement)
 calcButton.addEventListener('click', handleInsertEquipTube) 
+calcButton.addEventListener('click', handleInsertGereralTube)
