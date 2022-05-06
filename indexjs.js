@@ -645,15 +645,19 @@ resetBtn.href = window.location.href;
 resetBtn.textContent = "Reset";
 
 //Secteur de tubes :
-const tubeSelector = document.querySelector('#tubeSelector');
-tubeSelector.classList.add('select')
-for (const tube of tubeMat) {
-    const tubeOption = document.createElement('option');
-    tubeOption.textContent = ucFirst(tube);
-    tubeOption.value = tube;
-    tubeSelector.append(tubeOption);
+
+let createTubeOptions = function () {
+    const tubeSelector = document.querySelector('#tubeSelector');
+    tubeSelector.classList.add('select')
+    for (const tube of tubeMat) {
+        const tubeOption = document.createElement('option');
+        tubeOption.textContent = ucFirst(tube);
+        tubeOption.value = tube;
+        tubeSelector.append(tubeOption);
+    }
 }
 
+createTubeOptions();
 
 //on insert dans le DOM les équipements standard à afficher :
 // si la fonction isOptionToShowInSelect est === false
@@ -740,15 +744,13 @@ function createInput(option,coeff) {
 
 }
 
+
+
 //DELETE BUTTON + EVENT
+const deleteBtn = document.querySelectorAll(".btn--delete");
 function deleteEquipement() {
     this.closest(".form-group").remove()
 }
-
-//!EVENT
-
-const deleteBtn = document.querySelectorAll(".btn--delete");
-
 for (let i = 0; i < deleteBtn.length; i++) {
     deleteBtn[i].addEventListener('click', deleteEquipement);
 }
@@ -894,7 +896,6 @@ const getMinDiam = function (object) {
     }
 }
 
-
 function minDiamFormLabel (formGroup) {
         for (const equip of equipements) {
             if(formGroup.firstChild.textContent === equip.name){
@@ -979,6 +980,9 @@ function getDiamPerEquip (diamMinEquip) {
     return value;
 }
 
+
+
+
 let handleInsertEquipTube = function (e) {
     e.preventDefault()
     // on recupere tout les form-labels 
@@ -1006,8 +1010,11 @@ let handleInsertEquipTube = function (e) {
     
 }
 
-
-   
+/**
+ *Handler qui renvoi affiche les données sur l'alimentation générale à installer
+ *
+ * @param {*} e
+ */
 let handleInsertGereralTube = function (e){
     e.preventDefault();
 
