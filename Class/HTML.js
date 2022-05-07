@@ -44,10 +44,62 @@ class HTML extends Tubes {
         formInput.setAttribute("placeholder", "qt")
         appendTo.appendChild(formInput);
     }
+    /**
+     * Creation d'un bouton de supression pour les inputs affichés
+     * @param {HTMLElement} appendTo l'element html dans lequel append le bouton
+     */
     createFormDeleteBtn = function (appendTo) {
         let deleteBtn = document.createElement('div');
         deleteBtn.innerHTML = '<i class="bi bi-x-square" style="display:flex ; height: 100%; font-size: 45px ; width: 100%"></i>'
         deleteBtn.classList.add('btn--delete');
         appendTo.appendChild(deleteBtn);
     }
-}
+
+     /**
+     * Créer un HTMLElement p
+     * @param {string} className la classe de l'element p
+     * @param {*} innerHTML le texte à inserer
+     */
+      createPDescription = function (className,innerHTML = null,appendTo) {
+        const p = document.createElement('p');
+        p.classList.add(className);
+        p.innerHTML = innerHTML;
+        appendTo.append(p);
+    }
+    /**
+     * Créer une div avec une ou plusieurs class
+     * @param  {...any} className Class à donner a la div
+     */
+    createDiv = function (appendTo,...className){
+        const div = document.createElement('div');
+        for (let i = 0 ; i < className.length; i++){
+            div.classList.add(className[i]);
+        }
+        appendTo.appendChild(div);
+        
+    }
+
+        /**
+     * Fonction qui permet de calculer la somme de tout les inputs * coefficant (data-coeff)
+     * @param {HTMLCollection} inputs 
+     * @returns number
+     */
+    calcInputsValue = function (inputs) {
+    let globalCoefficiant = 0;
+    for (i = 0; i < inputs.length; i++) {
+        if (inputs[i] !== 0) {
+            globalCoefficiant += Number(inputs[i].value * inputs[i].dataset.coeff);
+        }
+    }
+    return globalCoefficiant < 2 && globalCoefficiant > 0 ? 2 : globalCoefficiant
+    }
+
+    /**
+    * Recupère le matériaux choisi par l'utilisateur
+     * @returns 
+     */
+    getMat = function () {
+        return tubeSelector.value;
+    }
+   
+}   

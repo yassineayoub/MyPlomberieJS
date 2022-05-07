@@ -607,6 +607,11 @@ const coefficiantDiametre = {
     14.5: 20,
     15: 20.1,
 }
+const equips = new Equipements;
+const tubeClass = new Tubes;
+const html = new HTML;
+
+html.createTubeListOptions();
 
 const tubes = JSON.parse(jsonTubes);
 const equipements = JSON.parse(jsonEquips);
@@ -647,11 +652,7 @@ const resetBtn = document.querySelector('a.reset');
 // resetBtn.textContent = "Reset";
 
 
-let tubeClass = new Tubes;
 
-const html = new HTML;
-
-html.createTubeListOptions();
 
 //Secteur de tubes :
 
@@ -721,52 +722,18 @@ function createInput(equipName, coeff) {
 
     //creation de la div qui contiendra l'inpput et ajout au form-group
     let divContainer = document.createElement('div')
-
-
    
     html.createFormLabel(equipName,formGroupDiv);
-    // let formLabel = document.createElement('label');
-    // formLabel.classList.add('form-label');
-    // formLabel.setAttribute('for', optionClass);
-    // formLabel.innerHTML = equipName;
-    // formGroupDiv.appendChild(formLabel);
 
     //creation du form Input
     html.createFormInput(equipName, divContainer)
-    // let createFormInput = function (inputName, coefficiant){
-    //     let formInput = document.createElement('input');
-    //     formInput.classList.add('form-control')
-    //     formInput.setAttribute('name', optionClass)
-    //     formInput.setAttribute('data-coeff', coeff);
-    //     formInput.setAttribute("id", optionClass);
-    //     formInput.setAttribute("placeholder", "qt")
-    //     divContainer.appendChild(formInput);
-    // }
-    // let formInput = document.createElement('input');
-    // formInput.classList.add('form-control')
-    // formInput.setAttribute('name', optionClass)
-    // formInput.setAttribute('data-coeff', coeff);
-    // formInput.setAttribute("id", optionClass);
-    // formInput.setAttribute("placeholder", "qt")
-    // divContainer.appendChild(formInput);
-
+ 
     //ajout du divContainer au form group
     divContainer.classList.add('container')
     formGroupDiv.appendChild(divContainer)
 
     //insertion button 
     html.createFormDeleteBtn(formGroupDiv)
-    
-    // let createFormDeleteBtn = function () {
-    //     let deleteBtn = document.createElement('div');
-    //     deleteBtn.innerHTML = '<i class="bi bi-x-square" style="display:flex ; height: 100%; font-size: 45px ; width: 100%"></i>'
-    //     deleteBtn.classList.add('btn--delete');
-    // }
-    // let deleteBtn = document.createElement('div');
-    // deleteBtn.innerHTML = '<i class="bi bi-x-square" style="display:flex ; height: 100%; font-size: 45px ; width: 100%"></i>'
-    // deleteBtn.classList.add('btn--delete');
-
-    // formGroupDiv.appendChild(deleteBtn);
 
 }
 
@@ -782,19 +749,19 @@ function getCoeffEquip(equipName) {
         }
     }
 }
-const equips = new Equipements;
+
 /**
  * Retourne le diametre interieur minimal en fonction du nom de l'équipement
  * @param {string} equipName Nom de l'équipement
  */
-function getDiamMinEquip(equipName) {
-    for (const equip of equipements) {
-        if (equip.name === equipName) {
-            // console.log(equip.diamMin);
-            return equip.diamMin;
-        }
-    }
-}
+// function getDiamMinEquip(equipName) {
+//     for (const equip of equipements) {
+//         if (equip.name === equipName) {
+//             // console.log(equip.diamMin);
+//             return equip.diamMin;
+//         }
+//     }
+// }
 
 
 
@@ -840,12 +807,6 @@ function lcFirst(string) {
 //* Span où l'on affichera le diametre général
 const spanGlobalResult = document.querySelector('#result');
 
-let url = "tube.json";
-let getOptions = {
-    method: "GET",
-    async: true,
-}
-
 
 
 /**
@@ -860,10 +821,10 @@ let calcInputsValue = function (inputs) {
             globalCoefficiant += Number(inputs[i].value * inputs[i].dataset.coeff);
         }
     }
-
     return globalCoefficiant < 2 && globalCoefficiant > 0 ? 2 : globalCoefficiant
-
 }
+
+
 //Function pour mettre des tirets dans les string si elle presente des espaces de nom, exemple poste d'eau = poste-d'eau
 function stringGroup(name) {
     return name.replace(/((?<![\\])[\s\/'"])/g, "_");
@@ -881,7 +842,6 @@ let calcGlobalDiamMin = function (globalCoefficiant) {
             // console.log(coefficiantDiametre[key]);
             diamMinGlobal = coefficiantDiametre[key];
         }
-
     }
     if (diamMinGlobal === undefined) {
         return false;
@@ -964,14 +924,14 @@ const getMinDiam = function (object) {
         }
     }
 }
-
-function minDiamFormLabel(formGroup) {
-    for (const equip of equipements) {
-        if (formGroup.firstChild.textContent === equip.name) {
-            return equip.diamMin;
-        };
-    }
-}
+// useless
+// function minDiamFormLabel(formGroup) {
+//     for (const equip of equipements) {
+//         if (formGroup.firstChild.textContent === equip.name) {
+//             return equip.diamMin;
+//         };
+//     }
+// }
 
 /**
  * Retourne true si l'input est vide ou false s'il est remmpli
@@ -995,8 +955,9 @@ function createDivDescription() {
         //on récupère la valeur de l'input contenu dans chaque formGroupDiv
         const inputValue = formGroupDiv[i].children[1].firstChild.value
         //Si l'input n'est pas vide on exécute le code
-        let diamMin = minDiamFormLabel(formGroupDiv[i])
+        // let diamMin = minDiamFormLabel(formGroupDiv[i])
         let equipementName = formGroupDiv[i].firstChild.textContent
+        let diamMin = equips.getDiamMinEquip(equipementName)
 
         //On créer la div qui va contenir les 3 p d'informations
         const div = document.createElement('div');
@@ -1134,26 +1095,19 @@ let handleAddEquipement = function () {
     createInput(equipName, getCoeffEquip(equipName));
 
     let divContainer = document.querySelector(`.${stringGroup(lcFirst(equipName))}.form-group`)
-
+//! j'en été la 22h50
     //On créer la div qui va contenir les 3 p d'informations
-    const div = document.createElement('div');
-    div.classList.add('divDescrib');
-    div.classList.add('hidden');
+    const div = html.createDiv(null,'divDescrib','hidden')
+    // const div = document.createElement('div');
+    // div.classList.add('divDescrib');
+    // div.classList.add('hidden');
 
-    const p = document.createElement('p');
-    p.classList.add('pDescrib');
-    p.innerHTML = `Tube à installer par <strong> ${equipName} </strong> :`;
+ 
+    //Creation des pDescription
+    html.createPDescription('pDescrib',`Tube à installer par <strong> ${equipName} </strong> :`,div)
+    html.createPDescription('pDescrib',`Diamètre <strong>intérieur minimal</strong> : <strong> ${equips.getDiamMinEquip(equipName)} mm </strong>`,div)
+    html.createPDescription('pDescrib',null,div)
 
-    const p1 = document.createElement('p');
-    p1.classList.add('pDescrib');
-    p1.innerHTML = `Diamètre <strong>intérieur minimal</strong> : <strong> ${getDiamMinEquip(equipName)} mm </strong>`
-
-    const p2 = document.createElement('p');
-    p2.classList.add('pDescrib');
-
-    div.append(p);
-    div.append(p1);
-    div.append(p2);
     divContainer.after(div);
 
     //Rend les boutons ajoutés supprimable
