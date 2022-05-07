@@ -610,7 +610,7 @@ const coefficiantDiametre = {
 
 const tubes = JSON.parse(jsonTubes);
 const equipements = JSON.parse(jsonEquips);
-const tubeMat = ['cuivre', 'PER', 'multicouche', 'PEHD'];
+// const tubeMat = ['cuivre', 'PER', 'multicouche', 'PEHD'];
 
 // equipements à afficher de base dans la page
 const equipementsToDontShow = ['Evier', 'Lavabo', 'Douche', 'WC', 'Lave-linge', 'Lave-vaisselle'];
@@ -646,20 +646,27 @@ const resetBtn = document.querySelector('a.reset');
 // resetBtn.href = window.location.href;
 // resetBtn.textContent = "Reset";
 
+
+let tubeClass = new Tubes;
+
+const html = new HTML;
+
+html.createTubeListOptions();
+
 //Secteur de tubes :
 
-let createTubeOptions = function () {
-    const tubeSelector = document.querySelector('#tubeSelector');
-    tubeSelector.classList.add('select')
-    for (const tube of tubeMat) {
-        const tubeOption = document.createElement('option');
-        tubeOption.textContent = ucFirst(tube);
-        tubeOption.value = tube;
-        tubeSelector.append(tubeOption);
-    }
-}
+// let createTubeOptions = function () {
+//     const tubeSelector = document.querySelector('#tubeSelector');
+//     tubeSelector.classList.add('select')
+//     for (const tube of tubeMat) {
+//         const tubeOption = document.createElement('option');
+//         tubeOption.textContent = ucFirst(tube);
+//         tubeOption.value = tube;
+//         tubeSelector.append(tubeOption);
+//     }
+// }
 
-createTubeOptions();
+// createTubeOptions();
 
 //on insert dans le DOM les équipements standard à afficher :
 // si la fonction isOptionToShowInSelect est === false
@@ -716,37 +723,54 @@ function createInput(equipName, coeff) {
     let divContainer = document.createElement('div')
 
 
-    //Creation du form Label
-    let formLabel = document.createElement('label');
-    formLabel.classList.add('form-label');
-    formLabel.setAttribute('for', optionClass);
-    formLabel.innerHTML = equipName;
-    formGroupDiv.appendChild(formLabel);
+   
+    html.createFormLabel(equipName,formGroupDiv);
+    // let formLabel = document.createElement('label');
+    // formLabel.classList.add('form-label');
+    // formLabel.setAttribute('for', optionClass);
+    // formLabel.innerHTML = equipName;
+    // formGroupDiv.appendChild(formLabel);
 
     //creation du form Input
-    let formInput = document.createElement('input');
-    formInput.classList.add('form-control')
-    formInput.setAttribute('name', optionClass)
-    formInput.setAttribute('data-coeff', coeff);
-    formInput.setAttribute("id", optionClass);
-    formInput.setAttribute("placeholder", "qt")
-    divContainer.appendChild(formInput);
+    html.createFormInput(equipName, divContainer)
+    // let createFormInput = function (inputName, coefficiant){
+    //     let formInput = document.createElement('input');
+    //     formInput.classList.add('form-control')
+    //     formInput.setAttribute('name', optionClass)
+    //     formInput.setAttribute('data-coeff', coeff);
+    //     formInput.setAttribute("id", optionClass);
+    //     formInput.setAttribute("placeholder", "qt")
+    //     divContainer.appendChild(formInput);
+    // }
+    // let formInput = document.createElement('input');
+    // formInput.classList.add('form-control')
+    // formInput.setAttribute('name', optionClass)
+    // formInput.setAttribute('data-coeff', coeff);
+    // formInput.setAttribute("id", optionClass);
+    // formInput.setAttribute("placeholder", "qt")
+    // divContainer.appendChild(formInput);
 
     //ajout du divContainer au form group
     divContainer.classList.add('container')
     formGroupDiv.appendChild(divContainer)
 
     //insertion button 
-    let deleteBtn = document.createElement('div');
-    // deleteBtn.classList.add('btn--' + optionClass.replace(/\s+/g,''));
-    deleteBtn.innerHTML = '<i class="bi bi-x-square" style="display:flex ; height: 100%; font-size: 45px ; width: 100%"></i>'
-    deleteBtn.classList.add('btn--delete');
+    html.createFormDeleteBtn(formGroupDiv)
+    
+    // let createFormDeleteBtn = function () {
+    //     let deleteBtn = document.createElement('div');
+    //     deleteBtn.innerHTML = '<i class="bi bi-x-square" style="display:flex ; height: 100%; font-size: 45px ; width: 100%"></i>'
+    //     deleteBtn.classList.add('btn--delete');
+    // }
+    // let deleteBtn = document.createElement('div');
+    // deleteBtn.innerHTML = '<i class="bi bi-x-square" style="display:flex ; height: 100%; font-size: 45px ; width: 100%"></i>'
+    // deleteBtn.classList.add('btn--delete');
 
-    formGroupDiv.appendChild(deleteBtn);
+    // formGroupDiv.appendChild(deleteBtn);
 
 }
 
-//!
+//! j'en etait ici, cration de la method getCoeffEquip dans equipements
 /**
  * Retourne le coefficant correspondant a l'équipement
  * @param {string} equipName Nom de l'équipement
@@ -758,6 +782,7 @@ function getCoeffEquip(equipName) {
         }
     }
 }
+const equips = new Equipements;
 /**
  * Retourne le diametre interieur minimal en fonction du nom de l'équipement
  * @param {string} equipName Nom de l'équipement
