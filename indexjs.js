@@ -738,7 +738,6 @@ function createInput(equipName, coeff) {
 
 }
 
-//! j'en etait ici, cration de la method getCoeffEquip dans equipements
 /**
  * Retourne le coefficant correspondant a l'équipement
  * @param {string} equipName Nom de l'équipement

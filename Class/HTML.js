@@ -130,5 +130,22 @@ class HTML extends Tubes {
             return resultWithMat.innerHTML = `<strong>Tuyau d'alimentation général recommandé : <br />${ucFirst(matSelected)} : Ø ${diamMinMat[0]} x ${diamMinMat[1]} mm </strong>(Ø ext / epaisseur)`;
         }
     }
+    /**
+     * Function qui affiche les equipements de base a afficher
+     * Les equipements à afficher sont dans l'array
+     */
+    showStarterEquips = function (equipsToShow) {
+    equipements.equipements.forEach(equipement => {
+        if (equipsToShow.includes(items)) {
+            return false
+        } else {
+            return true;
+        }
+    if (!isOptionToShowInSelect(equipement.name, equipementsToDontShow)) {
+        // Pour chaque equipements présent dans l'array , on créer un input 
+        createInput(equipement.name, equipement.coeff)
+    }
+});
+    }
    
 }   
