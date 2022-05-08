@@ -21,6 +21,7 @@ const calcButton = document.querySelector('#submit-form');
 const form = document.querySelector('form');
 //Reset button
 const resetBtn = document.querySelector('a.reset');
+resetBtn.href = window.location.href;
 //Création des inputs de base
 html.createBaseInputs();
 // supprime le form-group div le plus proche du bouton "btn--delete" et l'ajoute dans l'option du select
@@ -28,6 +29,7 @@ html.deleteButtonClick()
 //Creation des div de description des equipements
 html.createDivDescription()
 
+console.log(window.location);
 // ----- Handlers -----
 function handlerdeleteAddEquipement() {
     let optionToAdd = this.closest(".form-group").firstChild.textContent;
