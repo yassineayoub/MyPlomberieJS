@@ -1,47 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400&display=swap');
-*{
+
+* {
     font-family: 'Josefin Sans', sans-serif;
 }
-.headerContainer{
+
+.headerContainer {
     display: flex;
     grid-column: 2 / 3;
     flex-direction: column;
 }
-.htmlInstructions{
+
+.htmlInstructions {
     display: flex;
     grid-column: 2 / 3;
 }
-body{
+
+body {
     display: grid;
-    grid-template-columns: 0.5fr 1fr 0.5fr; 
+    grid-template-columns: 0.5fr 1fr 0.5fr;
     box-sizing: border-box;
-    
+
 }
-.title{
+
+.title {
     border: #988BAD solid 4px;
     padding: 5px;
     grid-column: 1/ 4;
     border-radius: 10px;
     margin-left: auto;
     margin-right: auto;
-    text-shadow:  2px 2px 2px #988BAD;
+    text-shadow: 2px 2px 2px #988BAD;
     font-size: 1.5rem;
     text-align: center;
 }
-form{ 
+
+form {
     grid-column: 2 / 3;
 }
-.tHeader{
+
+.tHeader {
     display: flex;
     justify-content: flex-end;
     height: fit-content;
     margin: 0 50px;
     font-size: 1rem;
 }
+
 .tHeader p {
     margin: 0;
 }
-.containerToggle{
+
+.containerToggle {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,18 +59,20 @@ form{
 .form-group {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
-    grid-template-rows: minmax(45px,auto);
+    grid-template-rows: minmax(45px, auto);
     margin-bottom: 1px;
     border-bottom: solid 1px;
     border-radius: 5px;
     background: #cce6f4;
 
 }
-.container{
+
+.container {
     display: flex;
     justify-content: flex-end;
 }
-.form-label{
+
+.form-label {
     justify-content: flex-start;
     margin-top: auto;
     margin-bottom: auto;
@@ -69,13 +80,14 @@ form{
     min-width: 50px;
     font-size: 1.2rem;
     padding-left: 5px;
-  
+
 }
-.form-control{
+
+.form-control {
     display: flex;
     margin: 0;
     width: 60px;
-    /* padding-left: 12px; */
+    margin-right: 1rem;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -88,7 +100,8 @@ form{
     color: rgb(0, 0, 0);
 
 }
-.pvc{
+
+.pvc {
     display: flex;
     width: 110px;
     margin: 0;
@@ -100,43 +113,44 @@ form{
     border: 1px solid rgb(92, 92, 92);
     border-bottom: none;
     border-radius: 5px;
-    cursor:default;
+    cursor: default;
     background: #988badd8;
 
 }
 
-.select option:nth-child(2n){
+.select option:nth-child(2n) {
     background: #b4c8e04a;
 }
-.select{
+
+.select {
     width: 100%;
     text-align: center;
     margin: auto;
+    cursor: pointer;
     height: 40px;
     font-size: 1.2rem;
     border-radius: 5px;
     margin-top: 10px;
     margin-bottom: 5px;
 }
-.select#equipSelect  {
-    width: 50%;
-    /* text-align: center; */
-    /* margin: auto; */
-    height: 40px;
+
+.select#equipSelect {
     font-size: 1.2rem;
     border-radius: 5px;
     margin-top: 10px;
 }
+
 #equipSelect option {
     margin-top: 5px;
     height: 40px;
 }
+
 #equipSelectBtn {
-    display: inline-flex;
-    align-items: center;
+    display: flex;
     gap: 0.5rem;
 }
-.selectBtn{
+
+.selectBtn {
     text-decoration: none;
     padding: 5px;
     height: 100%;
@@ -147,31 +161,34 @@ form{
     border-radius: 5px;
     color: rgb(0, 0, 0);
 }
+
 .form.equip {
     display: flex;
     flex-direction: column;
     gap: 5px
 }
 
-.btn{
-    
+.btn {
+
     width: 100%;
     display: flex;
     cursor: pointer;
     justify-content: center;
     margin: 10px 0;
-    /* flex-grow: 1; */
     align-items: flex-end;
     height: 45px;
     font-size: 2rem;
     background: #988BAD;
-    /* border: solid 1px black; */
     border-radius: 5px;
     color: rgb(0, 0, 0);
     box-shadow: 3px 3px 10px 2px hsla(0, 0%, 0%, 0.329);
 }
 
-button[class*="btn--"]{
+:is(.btn, button, .reset, ):hover {
+    background-color: #9784b65f;
+}
+
+button[class*="btn--"] {
     height: 45px;
     width: 50px;
     background: #988BAD;
@@ -179,18 +196,20 @@ button[class*="btn--"]{
     border: solid 1px black;
     border-radius: 5px;
 }
+
 .btn--delete {
     width: 45px;
+    cursor: pointer;
     height: 45px;
 }
 
-button svg{
-   height: 100%;
-   width: 100%;  
+button svg {
+    height: 100%;
+    width: 100%;
 }
 
 
-.reset{
+.reset {
     display: flex;
     text-align: center;
     margin: auto;
@@ -208,10 +227,12 @@ button svg{
 .success {
     background: #3ece86
 }
+
 .error {
     background-color: #f58282;
 }
-.result{
+
+.result {
     text-align: center;
     margin: 2px 0;
     padding: 10px;
@@ -224,15 +245,34 @@ button svg{
     height: auto;
     min-height: 40px;
 }
+
 .result2 {
     flex-direction: column;
 }
-.result p{
+
+.result p {
     margin: 0;
 }
-.resultFalse{
-    background:#f58282;
+
+.resultFalse {
+    background: #f58282;
     border-radius: 15px;
+}
+
+/* reseau sociaux  */
+.rs {
+    font-size: 2rem;
+    color: #9784b6
+}
+
+a .rs:hover {
+    color: black;
+}
+
+.footer {
+    justify-self: center;
+    margin-top: 3rem;
+    grid-column: 2 / 3;
 }
 
 
@@ -243,14 +283,21 @@ button svg{
     margin-bottom: 5px;
     margin-top: 0;
 }
-.pDescrib:first-of-type{
+.equipSelector{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pDescrib:first-of-type {
     text-decoration: underline;
 }
 
-.pDescrib{
+.pDescrib {
     margin: 5px;
 }
-input:target{
+
+input:target {
     color: #3ece86;
 }
 
@@ -258,48 +305,44 @@ input:target{
     display: none;
 }
 
+@media (max-width:768px) {
+    body {
+        grid-template-columns: auto 1fr auto;
 
-
-
-
-
-
-
-
-
-
-@media (max-width:768px){
-    body{
-        grid-template-columns: auto 1fr auto; 
-        
     }
-    .form{ 
-       grid-column: 2 / 3;
-    
+
+    .form {
+        grid-column: 2 / 3;
+
     }
-    
+
 }
-@media (max-width:360px){
-    body{
+
+@media (max-width:360px) {
+    body {
         grid-template-columns: 1fr;
 
     }
-    .form-group{ 
-       display: flex;
-       flex-direction: column;
+
+    .form-group {
+        display: flex;
+        justify-content: flex-end;
         margin-top: 10px;
 
     }
-    .form-control{
+
+    .form-control {
         min-height: 45px;
         flex-grow: 1;
     }
-    .form-label{
+
+    .form-label {
         padding: 10px;
-        justify-content: center;
-        text-align: center;
+        margin-right: auto;
+
     }
-    .container{
+
+    .container {
         justify-content: center;
     }
 
