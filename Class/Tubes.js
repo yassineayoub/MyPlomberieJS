@@ -1,5 +1,5 @@
 class Tubes extends Equipements{
-    jsonTubes = JSON.stringify([{
+    jsonTubes = JSON.stringify([{   
         "contenance": 0.028,
         "diamExt": 8,
         "diamInt": 6,
@@ -471,7 +471,7 @@ class Tubes extends Equipements{
         "id": 61,
         "type": "multicouche"
     }
-]);
+    ]);
     tubes = JSON.parse(jsonTubes)
     tubeMat = ['cuivre', 'PER', 'multicouche', 'PEHD'];
 
@@ -483,6 +483,21 @@ class Tubes extends Equipements{
     getTubeMat = function () {
         return this.tubeMat;
     }
+
+    /**
+     * Récupère la 1ere array !undefined
+     * @param {Object} object Object dans lequel prendre le plus petit diametre
+     * @returns 
+     */
+    getMinDiam = function (object) {
+        for (const diameter of object) {
+            if (diameter !== undefined) {
+                return diameter;
+            }
+        }
+    }
+
+
     
 
 }

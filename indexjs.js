@@ -610,6 +610,7 @@ const coefficiantDiametre = {
 const equips = new Equipements;
 const tubeClass = new Tubes;
 const html = new HTML;
+const coefficiants = new Coefficiants;
 
 html.createTubeListOptions();
 
@@ -835,19 +836,19 @@ function stringGroup(name) {
  * @param {param} globalCoefficiant 
  * @returns number | false
  */
-let calcGlobalDiamMin = function (globalCoefficiant) {
-    let diamMinGlobal;
-    for (const key in coefficiantDiametre) {
-        if (globalCoefficiant === Number(key)) {
-            // console.log(coefficiantDiametre[key]);
-            diamMinGlobal = coefficiantDiametre[key];
-        }
-    }
-    if (diamMinGlobal === undefined) {
-        return false;
-    }
-    return diamMinGlobal;
-}
+// let getDiamMinGlobal = function (globalCoefficiant) {
+//     let diamMinGlobal;
+//     for (const key in coefficiantDiametre) {
+//         if (globalCoefficiant === Number(key)) {
+//             // console.log(coefficiantDiametre[key]);
+//             diamMinGlobal = coefficiantDiametre[key];
+//         }
+//     }
+//     if (diamMinGlobal === undefined) {
+//         return false;
+//     }
+//     return diamMinGlobal;
+// }
 
 
 /**
@@ -862,21 +863,7 @@ let displayGlobalDiamMin = function (diamMinGlobal, elementClassorId) {
     return appendTo.textContent = text + diamMinGlobal + " mm";
 }
 
-/**
- * Affiche le matériaux et le diametre necessaire dans la span du haut
- * @param {element} matSelected Matériau selectionné par l'utilisateur
- * @param {array} diamMinMat Diametres à afficher 
- * @returns 
- */
-function displayGlobalDiamMinWithMat(matSelected, diamMinMat) {
 
-    if (matSelected !== "" && diamMinMat !== "") {
-        const resultWithMat = document.querySelector('#result2');
-        resultWithMat.className = "result success";
-        return resultWithMat.innerHTML = `<strong>Tuyau d'alimentation général recommandé : <br />${ucFirst(matSelected)} : Ø ${diamMinMat[0]} x ${diamMinMat[1]} mm </strong>(Ø ext / epaisseur)`;
-
-    }
-}
 
 /**
  * 
@@ -905,9 +892,9 @@ let checkValue = function (value, inputsValue) {
  * Recupère le matériaux choisi par l'utilisateur
  * @returns 
  */
-let getMat = function () {
-    return tubeSelector.value;
-}
+// let getMat = function () {
+//     return tubeSelector.value;
+// }
 
 // On veut rechercher dans l'object le diamètre qui se rapproche de 'globalDiamMin' qui correspond au tube selectionné
 // on commence par selectionner tout les diametres qui correspondent au tube selectionné
@@ -917,13 +904,13 @@ let getMat = function () {
  * @param {Object} object Object dans lequel prendre le plus petit diametre
  * @returns 
  */
-const getMinDiam = function (object) {
-    for (const diameter of object) {
-        if (diameter !== undefined) {
-            return diameter;
-        }
-    }
-}
+// const getMinDiam = function (object) {
+//     for (const diameter of object) {
+//         if (diameter !== undefined) {
+//             return diameter;
+//         }
+//     }
+// }
 // useless
 // function minDiamFormLabel(formGroup) {
 //     for (const equip of equipements) {
@@ -995,9 +982,9 @@ function getTubeSize(minDiam, mat) {
 }
 // Récupere le diametre interieur minimal en fonction de l'équipement saisie
 function minSizeEquip(equipName) {
-    for (const item of equipements) {
-        if (equipName === item.name) {
-            return item.diamMin;
+    for (const equip of equipements) {
+        if (equipName === equip.name) {
+            return equip.diamMin;
         }
     }
 }
@@ -1005,7 +992,7 @@ function minSizeEquip(equipName) {
 function getDiamPerEquip(diamMinEquip) {
     let value = []
     for (const tube of tubes) {
-        if (tube.type === getMat() && tube.diamInt >= diamMinEquip) {
+        if (tube.type === html.getSelectorMat() && tube.diamInt >= diamMinEquip) {
             return value = [ucFirst(tube.type), tube.diamExt, tube.ep]
         }
     }
@@ -1022,7 +1009,7 @@ let handleInsertEquipTube = function (e) {
         //Nom de chaque input affiché // Evier , Lavabo ...
         const labelName = labels.textContent
         //Diametre min en fonction de l'équipement ex : Evier = 12
-        const sizeMin = minSizeEquip(labelName);
+        const sizeMin = equips.getDiamMinEquip(labelName);
         //Tube à installer [cuivre,diamExt,epaisseur] 
         const tubeToInstall = getDiamPerEquip(sizeMin);
         //On créer le text à afficher dans le paragraphe en question
@@ -1049,16 +1036,16 @@ let handleInsertGereralTube = function (e) {
     e.preventDefault();
     const inputs = document.querySelectorAll('.form-control')
     //Calcul du coefficiant global
-    const globalCoefficiant = calcInputsValue(inputs);
+    const globalCoefficiant = html.calcInputsValue(inputs);
 
     // Calcul du diametre général minimal 
-    const globalDiamMin = calcGlobalDiamMin(globalCoefficiant);
+    const globalDiamMin = coefficiants.getDiamMinGlobal(globalCoefficiant);
 
     //Verification des champs et affichage dans la span en haut du form
     const verif = checkValue(globalDiamMin, globalCoefficiant);
 
     //Recupération du matériau séléctionné
-    const mat = getMat();
+    const mat = html.getSelectorMat();
 
     //Callback qui trie l'object en fonction de son matériau et du diametre minimal
     //Retour une array qui contient tout les diametres supérieur a globalDiamMin
@@ -1071,41 +1058,38 @@ let handleInsertGereralTube = function (e) {
     let tubeSelection = tubes.map(callbackTube);
 
     //On selectionne l'array la plus petite du tableau mais plus grande que globalDiamMin
-    const diamGeneralToInstall = getMinDiam(tubeSelection);
+    const diamGeneralToInstall = tubeClass.getMinDiam(tubeSelection);
     //On display le resultat avec le materiau et le diametre à installer
     if (verif) {
-        displayGlobalDiamMinWithMat(mat, diamGeneralToInstall);
+        html.displayGlobalDiamMinWithMat(mat, diamGeneralToInstall);
     }
+    html.showDescription()
+    // const formInput = document.querySelectorAll('.form-control')
 
-    const formInput = document.querySelectorAll('.form-control')
-
-    for (const input of formInput) {
-        if (parseInt(input.value) > 0) {
-            let describ = input.parentNode.nextSibling.parentNode.nextSibling;
-            describ.classList.remove('hidden');
-        }
-    }
+    // for (const input of formInput) {
+    //     if (parseInt(input.value) > 0) {
+    //         let describ = input.parentNode.nextSibling.parentNode.nextSibling;
+    //         describ.classList.remove('hidden');
+    //     }
+    // }
 }
 
 
 //On veut que l'element du select s'ajoute a la liste des matériaux 
 let handleAddEquipement = function () {
     let equipName = selectEquipement.value;
-    let equipCoeff = getCoeffEquip(equipName);
     createInput(equipName, getCoeffEquip(equipName));
 
     let divContainer = document.querySelector(`.${stringGroup(lcFirst(equipName))}.form-group`)
-//! j'en été la 22h50
-    //On créer la div qui va contenir les 3 p d'informations
-    const div = html.createDiv(null,'divDescrib','hidden')
-    // const div = document.createElement('div');
-    // div.classList.add('divDescrib');
-    // div.classList.add('hidden');
 
- 
+    //On créer la div qui va contenir les 3 p d'informations
+    const div = html.createDiv(null,['divDescrib','hidden'])
+
     //Creation des pDescription
-    html.createPDescription('pDescrib',`Tube à installer par <strong> ${equipName} </strong> :`,div)
-    html.createPDescription('pDescrib',`Diamètre <strong>intérieur minimal</strong> : <strong> ${equips.getDiamMinEquip(equipName)} mm </strong>`,div)
+    const textFirstP = `Tube à installer par <strong> ${equipName} </strong> :`;
+    const textSecondP = `Diamètre <strong>intérieur minimal</strong> : <strong> ${equips.getDiamMinEquip(equipName)} mm </strong>`;
+    html.createPDescription('pDescrib',textFirstP,div)
+    html.createPDescription('pDescrib',textSecondP,div)
     html.createPDescription('pDescrib',null,div)
 
     divContainer.after(div);
@@ -1118,7 +1102,7 @@ let handleAddEquipement = function () {
 
 }
 
-//Enleve un option du select a l'ajout dans la liste
+//Enleve une option du select a l'ajout dans la liste
 let removeOption = function (e) {
     e.preventDefault();
     let optionToRemove = document.querySelector(`option[value="${selectEquipement.value}"`)

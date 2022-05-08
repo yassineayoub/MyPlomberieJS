@@ -60,23 +60,38 @@ class HTML extends Tubes {
      * @param {string} className la classe de l'element p
      * @param {*} innerHTML le texte à inserer
      */
-      createPDescription = function (className,innerHTML = null,appendTo) {
+      createPDescription = function (className,innerHTML,appendTo) {
         const p = document.createElement('p');
         p.classList.add(className);
-        p.innerHTML = innerHTML;
+        if (innerHTML !== null ){
+            p.innerHTML = innerHTML;
+        }
         appendTo.append(p);
+    }
+
+    showDescription = function() {
+        const formInput = document.querySelectorAll('.form-control')
+
+    for (const input of formInput) {
+        if (parseInt(input.value) > 0) {
+            let describ = input.parentNode.nextSibling.parentNode.nextSibling;
+            describ.classList.remove('hidden');
+        }
+    }
     }
     /**
      * Créer une div avec une ou plusieurs class
      * @param  {...any} className Class à donner a la div
      */
-    createDiv = function (appendTo,...className){
+    createDiv = function (appendTo,className){
         const div = document.createElement('div');
         for (let i = 0 ; i < className.length; i++){
             div.classList.add(className[i]);
         }
-        appendTo.appendChild(div);
-        
+        if (appendTo !== null ){
+            appendTo.appendChild(div);
+        }
+        return div
     }
 
         /**
@@ -98,8 +113,22 @@ class HTML extends Tubes {
     * Recupère le matériaux choisi par l'utilisateur
      * @returns 
      */
-    getMat = function () {
+    getSelectorMat = function () {
         return tubeSelector.value;
+    }
+        /**
+     * Affiche le matériaux et le diametre necessaire dans la span du haut
+     * @param {element} matSelected Matériau selectionné par l'utilisateur
+     * @param {array} diamMinMat Diametres à afficher 
+     * @returns 
+     */
+    displayGlobalDiamMinWithMat = function (matSelected, diamMinMat) {
+
+        if (matSelected !== "" && diamMinMat !== "") {
+            const resultWithMat = document.querySelector('#result2');
+            resultWithMat.className = "result success";
+            return resultWithMat.innerHTML = `<strong>Tuyau d'alimentation général recommandé : <br />${ucFirst(matSelected)} : Ø ${diamMinMat[0]} x ${diamMinMat[1]} mm </strong>(Ø ext / epaisseur)`;
+        }
     }
    
 }   
