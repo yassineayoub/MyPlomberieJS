@@ -105,8 +105,11 @@ class Equipements {
         "name": "Lave-vaisselle"
     }
 ]);
-    equipements = JSON.parse(jsonEquips);
+    equipements = JSON.parse(this.jsonEquips);
     
+    // equipements à afficher de base dans la page
+    equipementsToShow = ['Evier', 'Lavabo', 'Douche', 'WC', 'Lave-linge', 'Lave-vaisselle'];
+
         /**
      * Retourne le coefficant correspondant a l'équipement
      * @param {string} equipName Nom de l'équipement

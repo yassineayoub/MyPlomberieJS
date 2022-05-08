@@ -472,7 +472,7 @@ class Tubes extends Equipements{
         "type": "multicouche"
     }
     ]);
-    tubes = JSON.parse(jsonTubes)
+    tubes = JSON.parse(this.jsonTubes)
     tubeMat = ['cuivre', 'PER', 'multicouche', 'PEHD'];
 
 
@@ -495,6 +495,16 @@ class Tubes extends Equipements{
                 return diameter;
             }
         }
+    }
+    // Retourne le matériau , le diamExt et l'epaisseur du tube à installer
+    getDiamPerEquip = function (diamMinEquip) {
+    let value = []
+        for (const tube of tubeClass.tubes) {
+            if (tube.type === html.getSelectorMat() && tube.diamInt >= diamMinEquip) {
+                return value = [helper.ucFirst(tube.type), tube.diamExt, tube.ep]
+            }
+        }
+        return value;
     }
 
 

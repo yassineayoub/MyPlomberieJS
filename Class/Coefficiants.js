@@ -39,10 +39,10 @@ class Coefficiants {
      */
     getDiamMinGlobal = function (globalCoefficiant) {
         let diamMinGlobal;
-        for (const key in coefficiantDiametre) {
+        for (const key in this.coefficiantDiametre) {
             if (globalCoefficiant === Number(key)) {
                 // console.log(coefficiantDiametre[key]);
-                diamMinGlobal = coefficiantDiametre[key];
+                diamMinGlobal = this.coefficiantDiametre[key];
             }
         }
         if (diamMinGlobal === undefined) {
