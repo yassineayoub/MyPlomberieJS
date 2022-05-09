@@ -1,5 +1,12 @@
 class Buttons {
-
+    
+    init = function () {
+    button.createPlusMinusBtn();
+    const btnPlusMinus = document.querySelectorAll('.btn__PM');
+    for (const btn of btnPlusMinus) {
+    btn.addEventListener('click',button.handleQuantity)
+}
+    }
 
     /**
      * Création des boutons plus et moins

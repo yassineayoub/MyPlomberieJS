@@ -1,10 +1,13 @@
 // --- Class ---
+
 const equips = new Equipements;
 const tubeClass = new Tubes;
 const html = new HTML;
 const coefficiants = new Coefficiants;
 const helper = new Helper;
 const button = new Buttons;
+const theme = new Theme;
+
 
 
 
@@ -147,9 +150,7 @@ calcButton.addEventListener('click', handleInsertEquipTube)
 calcButton.addEventListener('click', handleInsertGereralTube)
 
 
-button.createPlusMinusBtn();
-const btnPlusMinus = document.querySelectorAll('.btn__PM');
-for (const btn of btnPlusMinus) {
-    btn.addEventListener('click',button.handleQuantity)
-}
+button.init();
+theme.init()
+
 
