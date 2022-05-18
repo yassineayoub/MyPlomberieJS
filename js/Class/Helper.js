@@ -4,7 +4,7 @@ class Helper {
     /**
      * Function pour mettre des tirets dans les string si elle presente des espaces de nom, exemple poste d'eau = poste_d_eau
      *
-     * @memberof Helper
+     * 
      */
     stringReplace = function (name) {
     return name.replace(/((?<![\\])[\s\/'"])/g, "_");
@@ -12,7 +12,7 @@ class Helper {
     /**
      *Met en majuscule la 1er lettre du mot
      *@param {string} string
-     * @memberof Helper
+     * 
      */
     ucFirst = function (string) {
         let str = string
