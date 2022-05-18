@@ -116,6 +116,7 @@ let handleAddEquipement = function () {
     //au clic sur le btn, on ajoute un input
     html.createInput(equipName);
     let divContainer = document.querySelector(`.${helper.stringReplace(helper.lcFirst(equipName))}.form-group`)
+    divContainer.style.color = "black";
     //On créer la div qui va contenir les 3 p d'informations
     const div = html.createDiv(null,['divDescrib','hidden'])
 
@@ -133,6 +134,14 @@ let handleAddEquipement = function () {
     for (let i = 0; i < deleteBtn.length; i++) {
         deleteBtn[i].addEventListener('click', handlerdeleteAddEquipement);
     }
+    // if (localStorage.getItem('darkTheme')){
+    //      //On met les form group en color black
+    //      const formGrps = document.querySelectorAll('.form-group')
+    //      formGrps.forEach(formGrp => {
+    //          formGrp.style.color = "black";
+    //      })
+    // }
+    button.init();
 
 }
 //Enleve une option du select a l'ajout dans la liste
@@ -149,8 +158,8 @@ addEquipButton.addEventListener('click', handlerRemoveOption)
 calcButton.addEventListener('click', handleInsertEquipTube)
 calcButton.addEventListener('click', handleInsertGereralTube)
 
-
 button.init();
+
 theme.init()
 
 
